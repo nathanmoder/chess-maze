@@ -1,23 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import Rules from './Rules';
+import Score from './Score';
+import Board from './Board';
+
+/*
+The App component, the only child of the root component,
+will create the layout of the webpage; broadly speaking,
+a header bar with the player name, rules, and score, and
+the board on which the game is played beneath it.
+*/
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="row">
+        <div className="col-sm-4"><Rules /></div>
+        <div className="col-sm-8"><Score /></div>
+      </div>
+      <Board />
     </div>
   );
 }
