@@ -3,7 +3,6 @@
 
 
 import React, {useState} from 'react'
-import ReactDOM from 'react-dom/client';
 import "./board.css"
 
 
@@ -33,11 +32,13 @@ function Board() {
     //keeps track of what stage the player is on.
     const [stageNumber,setStageNumber]=useState(1);
 
+    const [pieceSelected,setPieceSelected]=useState(false)
+
     //INPUT: Attributes equivalent to those of the object in pieces
     //Adds a new element to the array pieces
     //RETURN: None
     const addPiece = (_x,_y,_pieceType,_allegiance) => {
-        const _blackwhite=_x+_y%2==0 ? 'white' : 'black';
+        const _blackwhite=_x+_y%2===0 ? 'white' : 'black';
         setPieces(prevPieces => [... prevPieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
     }
 
@@ -48,10 +49,55 @@ function Board() {
         for(let i=0; i<8; i++){
             for(let j=0; j<8; j++){
                 if(j!=0||i!=0)
-                    addPiece(i,j,'none','none')
+                    addPiece(j,i,'none','none')
             }
         }
+        //TODO: Place pieces
     }
+
+    const movePiece = (startx,starty,endx,endy) => {
+        
+    }
+
+    
+    //PieceMovement is a function describing the abilities of a piece
+        //given it's name and position on the board
+    //INPUT: ( {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate)
+    //OUTPUT: an array of pairs of numbers representing the squares the piece can move to.
+    const PieceMovement = (name,x,y) => {
+        return [0,0]
+    }
+
+    const showMovementRange= (x,y) => {
+        const squaresToAlight=PieceMovement(pieces[x+y*8].pieceType,x,y)
+        //Sets the style of those squares to display 
+    }
+    
+    const handleClick = (x,y) => {
+        if(!pieceSelected){
+            const square=pieces[x+y*8]
+            if(square.pieceType!='none'){
+                showMovementRange(x,y)
+            }
+            setPieceSelected([x,y])
+        }
+        else{
+            const oldx = pieceSelected[0]
+            const oldy = pieceSelected[1]
+            const moveableSquares=PieceMovement(pieces[oldx+oldy*8].pieceType,oldx,oldy)
+            let matched=false
+            for(let i of moveableSquares){
+                if([x,y]==i)
+                    matched=true
+            }
+            if(matched)
+                movePiece(oldx,oldy,x,y)
+            setPieceSelected(false)
+        }
+    }
+
+
+    
     
     //Initializes the board if this has not yet been done, or if a new stage is starting
     if(!hasStarted){
@@ -61,8 +107,8 @@ function Board() {
     return (
         <div id="board">
             {pieces.map(
-            e => {
-                return (<div id={e.position[0]+e.position[1]} className={e.allegiance+e.blackwhite+" square"}>{e.pieceType}</div>)
+                e => {
+                    return (<div id={e.position[0]+8*e.position[1]} className={e.allegiance+e.blackwhite+" square"} onClick={(() => handleClick(e.position[0],e.position[1]))}>{e.pieceType}</div>)
                 }
             )}
         </div>
