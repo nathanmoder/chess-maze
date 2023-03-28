@@ -19,7 +19,7 @@ detecting game overs, and allowing for piece movement.
 function Board() {
     //pieces will store an array of objects with four attributes.
         //it will later be augmented by the addPiece and initializeBoard functions
-    const [pieces, setPieces]=useState([])
+    const [pieces, setPieces]=useState([{pieceType:'none',allegiance:'none',blackwhite:'none',position:[0,0]}])
 
     //keeps track of whether or not the game has begun, so that initializeBoard
         //is not called excessively
@@ -34,7 +34,7 @@ function Board() {
     //RETURN: None
     const addPiece = (_x,_y,_pieceType,_allegiance) => {
         const _blackwhite=_x+_y%2==0 ? 'white' : 'black';
-        setPieces([pieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
+        setPieces(prevPieces => [... prevPieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
     }
 
     //INPUT: Size of the board to be instantiated
@@ -50,14 +50,14 @@ function Board() {
 
     //Initializes the board if this has not yet been done, or if a new stage is starting
     if(!hasStarted){
-        initializeBoard((stageNumber<5 ? stagenumber+3 : 8))
+        initializeBoard((stageNumber<5 ? stageNumber+3 : 8))
         setHasStarted(true)
     }
     return (
         <div id="board">
             {pieces.map(
             e => {
-                (<div id={position[0]+position[1]} className={e.allegiance+e.blackwhite+" square"}>{e.pieceType}</div>)
+                return (<div id={e.position[0]+e.position[1]} className={e.allegiance+e.blackwhite+" square"}>{e.pieceType}</div>)
             }
         )}
         </div>
