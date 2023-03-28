@@ -3,6 +3,8 @@
 
 
 import React, {useState} from 'react'
+import ReactDOM from 'react-dom/client';
+import "./board.css"
 
 
 /*
@@ -25,8 +27,10 @@ function Board() {
         //is not called excessively
     const [hasStarted,setHasStarted]=useState(false)
 
-    //keeps track of what stage the player is on. the board will get
-        //progressively larger as the player clears stages
+    //keeps track of whose turn it is
+    const [playerTurn,setPlayerTurn]=useState(true)
+
+    //keeps track of what stage the player is on.
     const [stageNumber,setStageNumber]=useState(1);
 
     //INPUT: Attributes equivalent to those of the object in pieces
@@ -40,17 +44,18 @@ function Board() {
     //INPUT: Size of the board to be instantiated
     //After executing, pieces will be full of squares both without and containing pieces
     //RETURN: None
-    const initializeBoard = (size) => {
-        for(let i=0; i<size; i++){
-            for(let j=0; j<size; j++){
-                addPiece(i,j,'none','none')
+    const initializeBoard = () => {
+        for(let i=0; i<8; i++){
+            for(let j=0; j<8; j++){
+                if(j!=0||i!=0)
+                    addPiece(i,j,'none','none')
             }
         }
     }
-
+    
     //Initializes the board if this has not yet been done, or if a new stage is starting
     if(!hasStarted){
-        initializeBoard((stageNumber<5 ? stageNumber+3 : 8))
+        initializeBoard()
         setHasStarted(true)
     }
     return (
@@ -58,8 +63,8 @@ function Board() {
             {pieces.map(
             e => {
                 return (<div id={e.position[0]+e.position[1]} className={e.allegiance+e.blackwhite+" square"}>{e.pieceType}</div>)
-            }
-        )}
+                }
+            )}
         </div>
     )
 }
