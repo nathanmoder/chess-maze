@@ -30,7 +30,7 @@ function Board() {
     const [playerTurn,setPlayerTurn]=useState(true)
 
     //keeps track of what stage the player is on.
-    const [stageNumber,setStageNumber]=useState(1);
+    const [stageNumber,setStageNumber]=useState(1)
 
     const [pieceSelected,setPieceSelected]=useState(false)
 
@@ -39,7 +39,26 @@ function Board() {
     //RETURN: None
     const addPiece = (_x,_y,_pieceType,_allegiance) => {
         const _blackwhite=(_x+_y)%2===0 ? 'white' : 'black';
-        setPieces(prevPieces => [... prevPieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
+        setPieces(prevPieces => [...prevPieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
+    }
+
+    const setPiece = (_x,_y,_pieceType,_allegiance) => {
+        const _blackwhite=(_x+_y)%2===0 ? 'white' : 'black';
+        const index=_x+(8*_y)
+        setPieces(prevPieces => {
+            const prevElements=prevPieces.slice(0,index)
+            console.log(prevElements)
+            const temp=prevPieces.slice(index+1,prevPieces.length-1)
+            let subsequentElememnts=[]
+            if(!(_x==7&&_y==7)){
+                subsequentElememnts=[...temp,prevPieces[prevPieces.length-1]]}
+            else{
+                subsequentElememnts=temp
+            }
+            console.log(subsequentElememnts)
+            const newPiece={pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}
+            return [...prevElements,newPiece,...subsequentElememnts]        
+        })
     }
 
     //INPUT: Size of the board to be instantiated
@@ -53,7 +72,11 @@ function Board() {
             }
         }
         //TODO: Place pieces
-        
+        setPiece(0,0,'rook','p');
+        setPiece(0,7,'rook','p');
+        setPiece(7,7,'rook','e');
+        //addPiece(0,1,'bishop','p');addPiece(0,6,'bishop','p')
+        //addPiece(0,2,'knight','p');addPiece(0,5,'knight','p')
         //TODO: Randomly place down the goal square
     }
 
@@ -76,6 +99,7 @@ function Board() {
     }
 
     const showMovementRange= (x,y) => {
+        //console.log(pieces)
         const squaresToAlight=PieceMovement(pieces[x+y*8].pieceType,x,y)
         //Sets the style of those squares to display
         for(let i of squaresToAlight){
@@ -98,9 +122,9 @@ function Board() {
         console.log("hello")
         if(!pieceSelected){
             const square=pieces[x+y*8]
-            if(square.pieceType!='none'){
+            //if(square.pieceType!='none'){
                 showMovementRange(x,y)
-            }
+            //}
             setPieceSelected([x,y])
         }
         else{
@@ -130,7 +154,8 @@ function Board() {
     }
     return (
         <div id="board">
-            {pieces.map(
+            {
+                pieces.map(
                 e => {
                     return (<div id={"square"+(e.position[0]+8*e.position[1])} className={e.allegiance+" "+e.blackwhite+" square"} onClick={(() => handleClick(e.position[0],e.position[1]))}>{e.pieceType}</div>)
                 }
