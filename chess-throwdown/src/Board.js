@@ -71,12 +71,15 @@ function Board() {
                     addPiece(j,i,'none','none')
             }
         }
-        //TODO: Place pieces
-        setPiece(0,0,'rook','p');
-        setPiece(0,7,'rook','p');
-        setPiece(7,7,'rook','e');
-        //addPiece(0,1,'bishop','p');addPiece(0,6,'bishop','p')
-        //addPiece(0,2,'knight','p');addPiece(0,5,'knight','p')
+        //Place pieces
+        setPiece(0,0,'rook','p');setPiece(0,7,'rook','p');setPiece(7,0,'rook','e');setPiece(7,7,'rook','e');
+        setPiece(0,1,'bishop','p');setPiece(0,6,'bishop','p');setPiece(7,1,'bishop','e');setPiece(7,6,'bishop','e');
+        setPiece(0,2,'knight','p');setPiece(0,5,'knight','p');setPiece(7,2,'knight','e');setPiece(7,5,'knight','e');
+        setPiece(0,3,'king','p');setPiece(7,3,'king','e');setPiece(0,4,'queen','p');setPiece(7,4,'queen','e');
+        setPiece(1,0,'pawn','p');setPiece(1,1,'pawn','p');setPiece(1,2,'pawn','p');setPiece(1,3,'pawn','p');
+        setPiece(1,4,'pawn','p');setPiece(1,5,'pawn','p');setPiece(1,6,'pawn','p');setPiece(1,7,'pawn','p');
+        setPiece(6,0,'pawn','e');setPiece(6,1,'pawn','e');setPiece(6,2,'pawn','e');setPiece(6,3,'pawn','e');
+        setPiece(6,4,'pawn','e');setPiece(6,5,'pawn','e');setPiece(6,6,'pawn','e');setPiece(6,7,'pawn','e');
         //TODO: Randomly place down the goal square
     }
 
@@ -157,7 +160,7 @@ function Board() {
             {
                 pieces.map(
                 e => {
-                    return (<div id={"square"+(e.position[0]+8*e.position[1])} className={e.allegiance+" "+e.blackwhite+" square"} onClick={(() => handleClick(e.position[0],e.position[1]))}>{e.pieceType}</div>)
+                    return (<div id={"square"+(e.position[0]+8*e.position[1])} className={e.allegiance+" "+e.blackwhite+" square"} onClick={(() => handleClick(e.position[0],e.position[1]))}>{e.pieceType} {e.allegiance}</div>)
                 }
             )}
         </div>
