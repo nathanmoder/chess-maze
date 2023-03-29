@@ -92,18 +92,324 @@ function Board() {
         
     }
 
+
+    //RETURN: 0 if none, 1 if friendly, 2 if enemy
+    const hasPiece = (x,y,allegiance) =>{
+        return 0
+    }
+    
     
     //PieceMovement is a function describing the abilities of a piece
         //given it's name and position on the board
     //INPUT: ( {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate)
     //OUTPUT: an array of pairs of numbers representing the squares the piece can move to.
-    const PieceMovement = (name,x,y) => {
-        return [[0,0]]
+    const PieceMovement = (name,x,y,allegiance) => {
+        let spaces=[]
+        switch(name){
+            case 'pawn':
+                if(allegiance=='p'){
+                    if(hasPiece(x+1,y,allegiance)==0)
+                        spaces=[[x+1,y]]
+                    if(x==1&&hasPiece(x+2,y,'p')==0)
+                        spaces=[...spaces,[x+2,y]]
+                    if(hasPiece(x+1,y+1,'p')==2&&y>0)
+                        spaces=[...spaces,[x+1,y+1]]
+                    if(hasPiece(x+1,y-1,'p')==2&&y<7)
+                        spaces=[...spaces,[x+1,y-1]]
+                }
+                else{
+                    if(hasPiece(x-1,y,allegiance)==0)
+                        spaces=[[x-1,y]]
+                    if(x==6&&hasPiece(x-2,y,'e')==0)
+                        spaces=[...spaces,[x-2,y]]
+                    if(hasPiece(x+1,y+1,'e')==2&&y>0)
+                        spaces=[...spaces,[x+1,y+1]]
+                    if(hasPiece(x+1,y-1,'e')==2&&y<7)
+                        spaces=[...spaces,[x+1,y-1]]
+                }
+                break;
+            case 'bishop':{
+                let collision1=false;
+                let collision2=false;
+                let collision3=false;
+                let collision4=false;
+                for(let i=1; i<=8; i++){
+                    if(!collision1&&(hasPiece(x-i,y-i,allegiance)!=1)&&!(x-i<0||y-i<0)){
+                        if(hasPiece(x-i,y-i,allegiance)==0)
+                            spaces=[...spaces,[x-i,y-i]]
+                        else{
+                            spaces=[...spaces,[x-i,y-i]]
+                            collision1=true;
+                        }
+                    }
+                    else{
+                        collision1=true;
+                    }
+
+                    if(!collision2&&(hasPiece(x-i,y+i,allegiance)!=1)&&!(x-i<0||y+i>7)){
+                        if(hasPiece(x-i,y+i,allegiance)==0)
+                            spaces=[...spaces,[x-i,y+i]]
+                        else{
+                            spaces=[...spaces,[x-i,y+i]]
+                            collision2=true;
+                        }
+                    }
+                    else{
+                        collision2=true;
+                    }
+
+                    if(!collision3&&(hasPiece(x+i,y-i,allegiance)!=1)&&!(x+i>7||y-i<0)){
+                        if(hasPiece(x+i,y-i,allegiance)==0)
+                            spaces=[...spaces,[x+i,y-i]]
+                        else{
+                            spaces=[...spaces,[x+i,y-i]]
+                            collision3=true;
+                        }
+                    }
+                    else{
+                        collision3=true;
+                    }
+
+                    if(!collision4&&(hasPiece(x+i,y+i,allegiance)!=1)&&!(x+i>7||y+i>7)){
+                        if(hasPiece(x+i,y+i,allegiance)==0)
+                            spaces=[...spaces,[x+i,y+i]]
+                        else{
+                            spaces=[...spaces,[x+i,y+i]]
+                            collision4=true;
+                        }
+                    }
+                    else{
+                        collision4=true;
+                    }
+                }}
+                break;
+            case 'knight':
+                if((hasPiece(x-1,y-2,allegiance)!=1)&&!(x-1<0||y-2<0)){
+                    spaces=[...spaces,[x-1,y-2]]
+                }
+                if((hasPiece(x-1,y+2,allegiance)!=1)&&!(x-1<0||y+2>7)){
+                    spaces=[...spaces,[x-1,y+2]]
+                }
+                if((hasPiece(x+1,y-2,allegiance)!=1)&&!(x+1>7||y-2<0)){
+                    spaces=[...spaces,[x+1,y-2]]
+                }
+                if((hasPiece(x+1,y+2,allegiance)!=1)&&!(x+1>7||y+2>7)){
+                    spaces=[...spaces,[x+1,y+2]]
+                }
+                if((hasPiece(x-2,y+1,allegiance)!=1)&&!(x-2<0||y+1>7)){
+                    spaces=[...spaces,[x-2,y+1]]
+                }
+                if((hasPiece(x-2,y-1,allegiance)!=1)&&!(x-2<0||y-1<0)){
+                    spaces=[...spaces,[x-2,y-1]]
+                }
+                if((hasPiece(x+2,y-1,allegiance)!=1)&&!(x+2>7||y-1<0)){
+                    spaces=[...spaces,[x+2,y-1]]
+                }
+                if((hasPiece(x+2,y+1,allegiance)!=1)&&!(x+2>7||y+1>7)){
+                    spaces=[...spaces,[x+2,y+1]]
+                }
+                break;
+            case 'rook':{
+                let collision1=false;
+                let collision2=false;
+                let collision3=false;
+                let collision4=false;
+                for(let i=1; i<=8; i++){
+                    if(!collision1&&(hasPiece(x-i,y,allegiance)!=1)&&!(x-i<0)){
+                        if(hasPiece(x-i,y,allegiance)==0)
+                            spaces=[...spaces,[x-i,y]]
+                        else{
+                            spaces=[...spaces,[x-i,y]]
+                            collision1=true;
+                        }
+                    }
+                    else{
+                        collision1=true;
+                    }
+
+                    if(!collision2&&(hasPiece(x,y+i,allegiance)!=1)&&!(y+i>7)){
+                        if(hasPiece(x,y+i,allegiance)==0)
+                            spaces=[...spaces,[x,y+i]]
+                        else{
+                            spaces=[...spaces,[x,y+i]]
+                            collision2=true;
+                        }
+                    }
+                    else{
+                        collision2=true;
+                    }
+
+                    if(!collision3&&(hasPiece(x,y-i,allegiance)!=1)&&!(y-i<0)){
+                        if(hasPiece(x,y-i,allegiance)==0)
+                            spaces=[...spaces,[x,y-i]]
+                        else{
+                            spaces=[...spaces,[x,y-i]]
+                            collision3=true;
+                        }
+                    }
+                    else{
+                        collision3=true;
+                    }
+
+                    if(!collision4&&(hasPiece(x+i,y,allegiance)!=1)&&!(x+i>7)){
+                        if(hasPiece(x+i,y,allegiance)==0)
+                            spaces=[...spaces,[x+i,y]]
+                        else{
+                            spaces=[...spaces,[x+i,y]]
+                            collision4=true;
+                        }
+                    }
+                    else{
+                        collision4=true;
+                    }
+                }}
+                break;
+            case 'queen':{
+                let collision1=false;
+                let collision2=false;
+                let collision3=false;
+                let collision4=false;
+                let collision5=false;
+                let collision6=false;
+                let collision7=false;
+                let collision8=false;
+                for(let i=1; i<=8; i++){
+                    if(!collision1&&(hasPiece(x-i,y-i,allegiance)!=1)&&!(x-i<0||y-i<0)){
+                        if(hasPiece(x-i,y-i,allegiance)==0)
+                            spaces=[...spaces,[x-i,y-i]]
+                        else{
+                            spaces=[...spaces,[x-i,y-i]]
+                            collision1=true;
+                        }
+                    }
+                    else{
+                        collision1=true;
+                    }
+
+                    if(!collision2&&(hasPiece(x-i,y+i,allegiance)!=1)&&!(x-i<0||y+i>7)){
+                        if(hasPiece(x-i,y+i,allegiance)==0)
+                            spaces=[...spaces,[x-i,y+i]]
+                        else{
+                            spaces=[...spaces,[x-i,y+i]]
+                            collision2=true;
+                        }
+                    }
+                    else{
+                        collision2=true;
+                    }
+
+                    if(!collision3&&(hasPiece(x+i,y-i,allegiance)!=1)&&!(x+i>7||y-i<0)){
+                        if(hasPiece(x+i,y-i,allegiance)==0)
+                            spaces=[...spaces,[x+i,y-i]]
+                        else{
+                            spaces=[...spaces,[x+i,y-i]]
+                            collision3=true;
+                        }
+                    }
+                    else{
+                        collision3=true;
+                    }
+
+                    if(!collision4&&(hasPiece(x+i,y+i,allegiance)!=1)&&!(x+i>7||y+i>7)){
+                        if(hasPiece(x+i,y+i,allegiance)==0)
+                            spaces=[...spaces,[x+i,y+i]]
+                        else{
+                            spaces=[...spaces,[x+i,y+i]]
+                            collision4=true;
+                        }
+                    }
+                    else{
+                        collision4=true;
+                    }
+                    if(!collision5&&(hasPiece(x-i,y,allegiance)!=1)&&!(x-i<0)){
+                        if(hasPiece(x-i,y,allegiance)==0)
+                            spaces=[...spaces,[x-i,y]]
+                        else{
+                            spaces=[...spaces,[x-i,y]]
+                            collision5=true;
+                        }
+                    }
+                    else{
+                        collision5=true;
+                    }
+
+                    if(!collision6&&(hasPiece(x,y+i,allegiance)!=1)&&!(y+i>7)){
+                        if(hasPiece(x,y+i,allegiance)==0)
+                            spaces=[...spaces,[x,y+i]]
+                        else{
+                            spaces=[...spaces,[x,y+i]]
+                            collision6=true;
+                        }
+                    }
+                    else{
+                        collision6=true;
+                    }
+
+                    if(!collision7&&(hasPiece(x,y-i,allegiance)!=1)&&!(y-i<0)){
+                        if(hasPiece(x,y-i,allegiance)==0)
+                            spaces=[...spaces,[x,y-i]]
+                        else{
+                            spaces=[...spaces,[x,y-i]]
+                            collision7=true;
+                        }
+                    }
+                    else{
+                        collision7=true;
+                    }
+
+                    if(!collision8&&(hasPiece(x+i,y,allegiance)!=1)&&!(x+i>7)){
+                        if(hasPiece(x+i,y,allegiance)==0)
+                            spaces=[...spaces,[x+i,y]]
+                        else{
+                            spaces=[...spaces,[x+i,y]]
+                            collision8=true;
+                        }
+                    }
+                    else{
+                        collision8=true;
+                    }
+                }}
+                break;
+            case 'king':
+                let i=1
+                if((hasPiece(x-i,y-i,allegiance)!=1)&&!(x-i<0||y-i<0)){
+                    spaces=[...spaces,[x-i,y-i]]
+                }
+                if((hasPiece(x-i,y+i,allegiance)!=1)&&!(x-i<0||y+i>7)){
+                    spaces=[...spaces,[x-i,y+i]]
+                }
+                if((hasPiece(x+i,y-i,allegiance)!=1)&&!(x+i>7||y-i<0)){
+                    spaces=[...spaces,[x+i,y-i]]
+                }
+                if((hasPiece(x+i,y+i,allegiance)!=1)&&!(x+i>7||y+i>7)){
+                    spaces=[...spaces,[x+i,y+i]]
+                }
+                if((hasPiece(x-i,y,allegiance)!=1)&&!(x-i<0)){
+                    spaces=[...spaces,[x-i,y]]
+                }
+
+                if((hasPiece(x,y+i,allegiance)!=1)&&!(y+i>7)){
+                    spaces=[...spaces,[x,y+i]]
+                }
+
+                if((hasPiece(x,y-i,allegiance)!=1)&&!(y-i<0)){
+                    spaces=[...spaces,[x,y-i]]
+                }
+                if((hasPiece(x+i,y,allegiance)!=1)&&!(x+i>7)){
+                    spaces=[...spaces,[x+i,y]]
+                }
+                break;
+
+
+
+
+        }
+        return spaces
     }
 
     const showMovementRange= (x,y) => {
         //console.log(pieces)
-        const squaresToAlight=PieceMovement(pieces[x+y*8].pieceType,x,y)
+        const squaresToAlight=PieceMovement(pieces[x+y*8].pieceType,x,y,pieces[x+y*8].allegiance)
         //Sets the style of those squares to display
         for(let i of squaresToAlight){
             let square=document.getElementById("square"+(i[0]+(8*i[1])))
@@ -113,7 +419,7 @@ function Board() {
 
 
     const hideMovementRange=(x,y) =>{
-        const squaresToDim=PieceMovement(pieces[x+y*8].pieceType,x,y)
+        const squaresToDim=PieceMovement(pieces[x+y*8].pieceType,x,y,pieces[x+y*8].allegiance)
         for(let i of squaresToDim){
             let square=document.getElementById("square"+(i[0]+(8*i[1])))
             const _blackwhite=(i[0]+i[1])%2===0 ? 'beige' : 'green';
@@ -133,14 +439,16 @@ function Board() {
         else{
             const oldx = pieceSelected[0]
             const oldy = pieceSelected[1]
-            const moveableSquares=PieceMovement(pieces[oldx+oldy*8].pieceType,oldx,oldy)
+            const moveableSquares=PieceMovement(pieces[oldx+oldy*8].pieceType,oldx,oldy,pieces[oldx+oldy*8].allegiance)
             let matched=false
             for(let i of moveableSquares){
                 if([x,y]==i)
                     matched=true
             }
-            if(matched)
+            if(matched){
                 movePiece(oldx,oldy,x,y)
+                //setPlayerTurn(false)
+            }
             hideMovementRange(oldx,oldy)
             setPieceSelected(false)
         }
