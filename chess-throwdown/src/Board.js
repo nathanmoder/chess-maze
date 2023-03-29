@@ -20,7 +20,7 @@ detecting game overs, and allowing for piece movement.
 function Board() {
     //pieces will store an array of objects with four attributes.
         //it will later be augmented by the addPiece and initializeBoard functions
-    const [pieces, setPieces]=useState([{pieceType:'none',allegiance:'none',blackwhite:'none',position:[0,0]}])
+    const [pieces, setPieces]=useState([{pieceType:'none',allegiance:'none',blackwhite:'white',position:[0,0]}])
 
     //keeps track of whether or not the game has begun, so that initializeBoard
         //is not called excessively
@@ -38,7 +38,7 @@ function Board() {
     //Adds a new element to the array pieces
     //RETURN: None
     const addPiece = (_x,_y,_pieceType,_allegiance) => {
-        const _blackwhite=_x+_y%2===0 ? 'white' : 'black';
+        const _blackwhite=(_x+_y)%2===0 ? 'white' : 'black';
         setPieces(prevPieces => [... prevPieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
     }
 
@@ -53,6 +53,13 @@ function Board() {
             }
         }
         //TODO: Place pieces
+        
+        //TODO: Randomly place down the goal square
+    }
+
+
+    const newStage = () => {
+
     }
 
     const movePiece = (startx,starty,endx,endy) => {
@@ -65,15 +72,30 @@ function Board() {
     //INPUT: ( {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate)
     //OUTPUT: an array of pairs of numbers representing the squares the piece can move to.
     const PieceMovement = (name,x,y) => {
-        return [0,0]
+        return [[0,0]]
     }
 
     const showMovementRange= (x,y) => {
         const squaresToAlight=PieceMovement(pieces[x+y*8].pieceType,x,y)
-        //Sets the style of those squares to display 
+        //Sets the style of those squares to display
+        for(let i of squaresToAlight){
+            let square=document.getElementById("square"+(i[0]+(8*i[1])))
+            square.style.backgroundColor="red"
+        }
+    }
+
+
+    const hideMovementRange=(x,y) =>{
+        const squaresToDim=PieceMovement(pieces[x+y*8].pieceType,x,y)
+        for(let i of squaresToDim){
+            let square=document.getElementById("square"+(i[0]+(8*i[1])))
+            const _blackwhite=(i[0]+i[1])%2===0 ? 'beige' : 'green';
+            square.style.backgroundColor=_blackwhite
+        }
     }
     
     const handleClick = (x,y) => {
+        console.log("hello")
         if(!pieceSelected){
             const square=pieces[x+y*8]
             if(square.pieceType!='none'){
@@ -92,23 +114,25 @@ function Board() {
             }
             if(matched)
                 movePiece(oldx,oldy,x,y)
+            hideMovementRange(oldx,oldy)
             setPieceSelected(false)
         }
     }
-
-
     
     
     //Initializes the board if this has not yet been done, or if a new stage is starting
     if(!hasStarted){
-        initializeBoard()
+        if(stageNumber==1)
+            initializeBoard()
+        else
+            newStage()
         setHasStarted(true)
     }
     return (
         <div id="board">
             {pieces.map(
                 e => {
-                    return (<div id={e.position[0]+8*e.position[1]} className={e.allegiance+e.blackwhite+" square"} onClick={(() => handleClick(e.position[0],e.position[1]))}>{e.pieceType}</div>)
+                    return (<div id={"square"+(e.position[0]+8*e.position[1])} className={e.allegiance+" "+e.blackwhite+" square"} onClick={(() => handleClick(e.position[0],e.position[1]))}>{e.pieceType}</div>)
                 }
             )}
         </div>

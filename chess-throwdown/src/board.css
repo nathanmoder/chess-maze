@@ -6,3 +6,11 @@
 .square{
     border: solid;
 }
+
+.black{
+    background-color: green;
+}
+
+.white{
+    background-color: beige;
+}
