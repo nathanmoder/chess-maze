@@ -95,7 +95,15 @@ function Board() {
 
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
     const hasPiece = (x,y,allegiance) =>{
-        return 0
+        if(x<0||x>7||y<0||y>7||pieces[x+(8*y)].pieceType=='none'){
+            return 0;
+        }
+        else{
+            if(pieces[x+(8*y)].allegiance==allegiance)
+                return 1;
+            else
+                return 2;
+        }
     }
     
     
