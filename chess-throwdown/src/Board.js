@@ -20,7 +20,7 @@ detecting game overs, and allowing for piece movement.
 function Board() {
     //pieces will store an array of objects with four attributes.
         //it will later be augmented by the addPiece and initializeBoard functions
-    const [pieces, setPieces]=useState([{pieceType:'none',allegiance:'none',blackwhite:'white',position:[0,0]}])
+    const [pieces, setPieces]=useState([{pieceType:'none',allegiance:'none',blackwhite:'beige',position:[0,0]}])
 
     //keeps track of whether or not the game has begun, so that initializeBoard
         //is not called excessively
@@ -38,16 +38,14 @@ function Board() {
     //Adds a new element to the array pieces
     //RETURN: None
     const addPiece = (_x,_y,_pieceType,_allegiance) => {
-        const _blackwhite=(_x+_y)%2===0 ? 'white' : 'black';
+        const _blackwhite=(_x+_y)%2===0 ? 'beige' : 'green';
         setPieces(prevPieces => [...prevPieces,{pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}])
     }
 
     const setPiece = (_x,_y,_pieceType,_allegiance) => {
-        const _blackwhite=(_x+_y)%2===0 ? 'white' : 'black';
         const index=_x+(8*_y)
         setPieces(prevPieces => {
             const prevElements=prevPieces.slice(0,index)
-            console.log(prevElements)
             const temp=prevPieces.slice(index+1,prevPieces.length-1)
             let subsequentElememnts=[]
             if(!(_x==7&&_y==7)){
@@ -55,8 +53,7 @@ function Board() {
             else{
                 subsequentElememnts=temp
             }
-            console.log(subsequentElememnts)
-            const newPiece={pieceType:_pieceType,allegiance:_allegiance,blackwhite:_blackwhite,position:[_x,_y]}
+            const newPiece={pieceType:_pieceType,allegiance:_allegiance,blackwhite:prevPieces[index].blackwhite,position:[_x,_y]}
             return [...prevElements,newPiece,...subsequentElememnts]        
         })
     }
@@ -80,7 +77,23 @@ function Board() {
         setPiece(1,4,'pawn','p');setPiece(1,5,'pawn','p');setPiece(1,6,'pawn','p');setPiece(1,7,'pawn','p');
         setPiece(6,0,'pawn','e');setPiece(6,1,'pawn','e');setPiece(6,2,'pawn','e');setPiece(6,3,'pawn','e');
         setPiece(6,4,'pawn','e');setPiece(6,5,'pawn','e');setPiece(6,6,'pawn','e');setPiece(6,7,'pawn','e');
-        //TODO: Randomly place down the goal square
+        
+        //Randomly place down the goal square
+        const randx=Math.floor(Math.random()*8);
+        const randy=Math.floor(Math.random()*8);
+        const index=randx+(8*randy)
+        setPieces(prevPieces => {
+            const prevElements=prevPieces.slice(0,index)
+            const temp=prevPieces.slice(index+1,prevPieces.length-1)
+            let subsequentElememnts=[]
+            if(!(randx==7&&randy==7)){
+                subsequentElememnts=[...temp,prevPieces[prevPieces.length-1]]}
+            else{
+                subsequentElememnts=temp
+            }
+            const newPiece={pieceType:'none',allegiance:'none',blackwhite:'gold',position:[randx,randy]}
+            return [...prevElements,newPiece,...subsequentElememnts]        
+        })
     }
 
 
@@ -89,7 +102,6 @@ function Board() {
     }
 
     const movePiece = (startx,starty,endx,endy) => {
-        console.log("hello!")
         const pieceHere=pieces[startx+(8*starty)];
         setPiece(endx,endy,pieceHere.pieceType,pieceHere.allegiance);
         setPiece(startx,starty,'none','none');
@@ -436,7 +448,7 @@ function Board() {
         const squaresToDim=PieceMovement(pieces[x+y*8].pieceType,x,y,pieces[x+y*8].allegiance)
         for(let i of squaresToDim){
             let square=document.getElementById("square"+(i[0]+(8*i[1])))
-            const _blackwhite=(i[0]+i[1])%2===0 ? 'beige' : 'green';
+            const _blackwhite=pieces[i[0]+(8*i[1])].blackwhite;
             square.style.backgroundColor=_blackwhite
         }
     }
@@ -444,9 +456,9 @@ function Board() {
     const handleClick = (x,y) => {
         if(!pieceSelected){
             const square=pieces[x+y*8]
-            //if(square.pieceType!='none'){
+            if(square.pieceType!='none'){
                 showMovementRange(x,y)
-            //}
+            }
             setPieceSelected([x,y])
         }
         else{
@@ -455,10 +467,8 @@ function Board() {
             const moveableSquares=PieceMovement(pieces[oldx+oldy*8].pieceType,oldx,oldy,pieces[oldx+oldy*8].allegiance)
             let matched=false
             for(let i of moveableSquares){
-                console.log(i+" "+[x,y])
                 if(x==i[0]&&y==i[1])
                     matched=true
-                    console.log(matched)
             }
             if(matched){
                 movePiece(oldx,oldy,x,y)

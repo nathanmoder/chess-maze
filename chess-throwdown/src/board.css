@@ -7,10 +7,14 @@
     border: solid;
 }
 
-.black{
+.green{
     background-color: green;
 }
 
-.white{
+.beige{
     background-color: beige;
+}
+
+.gold{
+    background-color: gold;
 }
