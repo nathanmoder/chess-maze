@@ -65,10 +65,12 @@ function Board() {
     //After executing, pieces will be full of squares both without and containing pieces
     //RETURN: None
     const initializeBoard = () => {
+        console.log("in initializer")
+        scoreUpdate(0);
         for(let i=0; i<8; i++){
             for(let j=0; j<8; j++){
                 if(j!=0||i!=0)
-                    addPiece(j,i,'none','none')
+                    addPiece(j,i,'none','none');
             }
         }
         //Place pieces
@@ -99,9 +101,75 @@ function Board() {
         })
     }
 
+    //TODO: Implement
+    const findGoldSquare = () => {
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;++j){
+                if(pieces[j+(i*8)].blackwhite=='gold')
+                    return[j,i];
+            }
+        }
+    }
 
+    //TODO: Implement
     const newStage = () => {
+        console.log("in new stage")
+        //Clear the board
+        for(let i=0; i<8; i++){
+            for(let j=0; j<8; j++){
+                if(j!=0||i!=0)
+                    setPiece(j,i,'none','none');
+            }
+        }
+        //Place pieces
+        setPiece(0,0,'rook','p');setPiece(0,7,'rook','p');setPiece(7,0,'rook','e');setPiece(7,7,'rook','e');
+        setPiece(0,1,'bishop','p');setPiece(0,6,'bishop','p');setPiece(7,1,'bishop','e');setPiece(7,6,'bishop','e');
+        setPiece(0,2,'knight','p');setPiece(0,5,'knight','p');setPiece(7,2,'knight','e');setPiece(7,5,'knight','e');
+        setPiece(0,3,'king','p');setPiece(7,3,'king','e');setPiece(0,4,'queen','p');setPiece(7,4,'queen','e');
+        setPiece(1,0,'pawn','p');setPiece(1,1,'pawn','p');setPiece(1,2,'pawn','p');setPiece(1,3,'pawn','p');
+        setPiece(1,4,'pawn','p');setPiece(1,5,'pawn','p');setPiece(1,6,'pawn','p');setPiece(1,7,'pawn','p');
+        setPiece(6,0,'pawn','e');setPiece(6,1,'pawn','e');setPiece(6,2,'pawn','e');setPiece(6,3,'pawn','e');
+        setPiece(6,4,'pawn','e');setPiece(6,5,'pawn','e');setPiece(6,6,'pawn','e');setPiece(6,7,'pawn','e');
 
+        //Remove the current goal square
+        const gold=findGoldSquare();
+        console.log(gold);
+        const _blackwhite=(gold[0]+gold[1])%2===0 ? 'beige' : 'green';
+        const index1=gold[0]+(8*gold[1]);
+        setPieces(prevPieces => {
+            const prevElements=prevPieces.slice(0,index1)
+            const temp=prevPieces.slice(index1+1,prevPieces.length-1)
+            let subsequentElememnts=[]
+            if(!(randx==7&&randy==7)){
+                subsequentElememnts=[...temp,prevPieces[prevPieces.length-1]]}
+            else{
+                subsequentElememnts=temp
+            }
+            const newPiece={pieceType:'none',allegiance:'none',blackwhite:_blackwhite,position:[gold[0],gold[1]]}
+            return [...prevElements,newPiece,...subsequentElememnts]        
+        })
+        let square1=document.getElementById('square'+index1);
+        console.log(square1.style.backgroundColor);
+        square1.style.backgroundColor="beige";
+        console.log(square1.style.backgroundColor);
+
+        //Randomly place down the goal square
+        const randx=Math.floor(Math.random()*4+2);
+        const randy=Math.floor(Math.random()*8);
+        const index=randx+(8*randy)
+        document.getElementById('square'+index).style.backgroundColor='gold';
+        setPieces(prevPieces => {
+            const prevElements=prevPieces.slice(0,index)
+            const temp=prevPieces.slice(index+1,prevPieces.length-1)
+            let subsequentElememnts=[]
+            if(!(randx==7&&randy==7)){
+                subsequentElememnts=[...temp,prevPieces[prevPieces.length-1]]}
+            else{
+                subsequentElememnts=temp
+            }
+            const newPiece={pieceType:'none',allegiance:'none',blackwhite:'gold',position:[randx,randy]}
+            return [...prevElements,newPiece,...subsequentElememnts]        
+        })
     }
 
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
@@ -119,24 +187,32 @@ function Board() {
     
     const movePiece = (startx,starty,endx,endy) => {
         const pieceHere=pieces[startx+(8*starty)];
-        
+        const pieceThere=pieces[endx+(8*endy)];
+        //Actually move the piece
+        setPiece(endx,endy,pieceHere.pieceType,pieceHere.allegiance);
+        setPiece(startx,starty,'none','none');
         //Increment Score on kill
         if(hasPiece(endx,endy,pieceHere.allegiance)==2)
             scoreUpdate(prevScore => prevScore+1);
 
 
         //TODO: If player king dies, game over
-
-        //If player king onto gold, next stage and increment score
-        if(pieceHere.pieceType=='king'&&pieceHere.allegiance=='p'&&pieces[endx+(8*endy)].blackwhite=='gold'){
-            //TODO: Go to next stage
-            scoreUpdate(prevScore => prevScore+(10*stageNumber));
+        if(pieceThere.pieceType=='king'&&pieceThere.allegiance=='p'){
+            
         }
 
+        //TODO: If enemy king dies, next stage and increment score
 
-        //Actually move the piece
-        setPiece(endx,endy,pieceHere.pieceType,pieceHere.allegiance);
-        setPiece(startx,starty,'none','none');
+        //If player king onto gold, next stage and increment score
+        if(pieceHere.pieceType=='king'&&pieceHere.allegiance=='p'&&pieceThere.blackwhite=='gold'){
+            //TODO: Go to next stage
+            scoreUpdate(prevScore => prevScore+(10*stageNumber));
+            setStageNumber(prevStage => prevStage+1);
+            setHasStarted(false);
+            newStage();
+        }
+
+        
     }
 
     //PieceMovement is a function describing the abilities of a piece
@@ -496,11 +572,13 @@ function Board() {
     
     //Initializes the board if this has not yet been done, or if a new stage is starting
     if(!hasStarted){
-        if(stageNumber==1)
+        setHasStarted(prevStart=>true)
+        if(stageNumber==1){
             initializeBoard()
-        else
-            newStage()
-        setHasStarted(true)
+        }
+        else{
+           // newStage()
+        }
     }
     return (
         <div id="board">
