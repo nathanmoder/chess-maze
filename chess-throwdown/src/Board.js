@@ -1,5 +1,5 @@
 //Nathan Moder
-//Last edited 3/27/2023
+//Last edited 3/29/2023
 
 
 import React, {useState} from 'react'
@@ -89,7 +89,13 @@ function Board() {
     }
 
     const movePiece = (startx,starty,endx,endy) => {
-        
+        console.log("hello!")
+        const pieceHere=pieces[startx+(8*starty)];
+        setPiece(endx,endy,pieceHere.pieceType,pieceHere.allegiance);
+        setPiece(startx,starty,'none','none');
+        //TODO: Increment Score
+        //TODO: If player king, game over
+        //TODO: If enemy king, next stage? This may be too easy
     }
 
 
@@ -130,10 +136,10 @@ function Board() {
                         spaces=[[x-1,y]]
                     if(x==6&&hasPiece(x-2,y,'e')==0)
                         spaces=[...spaces,[x-2,y]]
-                    if(hasPiece(x+1,y+1,'e')==2&&y>0)
-                        spaces=[...spaces,[x+1,y+1]]
-                    if(hasPiece(x+1,y-1,'e')==2&&y<7)
-                        spaces=[...spaces,[x+1,y-1]]
+                    if(hasPiece(x-1,y+1,'e')==2&&y>0)
+                        spaces=[...spaces,[x-1,y+1]]
+                    if(hasPiece(x-1,y-1,'e')==2&&y<7)
+                        spaces=[...spaces,[x-1,y-1]]
                 }
                 break;
             case 'bishop':{
@@ -436,7 +442,6 @@ function Board() {
     }
     
     const handleClick = (x,y) => {
-        console.log("hello")
         if(!pieceSelected){
             const square=pieces[x+y*8]
             //if(square.pieceType!='none'){
@@ -450,8 +455,10 @@ function Board() {
             const moveableSquares=PieceMovement(pieces[oldx+oldy*8].pieceType,oldx,oldy,pieces[oldx+oldy*8].allegiance)
             let matched=false
             for(let i of moveableSquares){
-                if([x,y]==i)
+                console.log(i+" "+[x,y])
+                if(x==i[0]&&y==i[1])
                     matched=true
+                    console.log(matched)
             }
             if(matched){
                 movePiece(oldx,oldy,x,y)
