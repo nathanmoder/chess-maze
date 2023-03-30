@@ -2,8 +2,9 @@
 //Last edited 3/29/2023
 
 
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import "./board.css"
+import { ScoreUpdateContext } from './App'
 
 
 /*
@@ -33,6 +34,8 @@ function Board() {
     const [stageNumber,setStageNumber]=useState(1)
 
     const [pieceSelected,setPieceSelected]=useState(false)
+
+    const scoreUpdate=useContext(ScoreUpdateContext);
 
     //INPUT: Attributes equivalent to those of the object in pieces
     //Adds a new element to the array pieces
@@ -79,7 +82,7 @@ function Board() {
         setPiece(6,4,'pawn','e');setPiece(6,5,'pawn','e');setPiece(6,6,'pawn','e');setPiece(6,7,'pawn','e');
         
         //Randomly place down the goal square
-        const randx=Math.floor(Math.random()*8);
+        const randx=Math.floor(Math.random()*4+2);
         const randy=Math.floor(Math.random()*8);
         const index=randx+(8*randy)
         setPieces(prevPieces => {
@@ -101,16 +104,6 @@ function Board() {
 
     }
 
-    const movePiece = (startx,starty,endx,endy) => {
-        const pieceHere=pieces[startx+(8*starty)];
-        setPiece(endx,endy,pieceHere.pieceType,pieceHere.allegiance);
-        setPiece(startx,starty,'none','none');
-        //TODO: Increment Score
-        //TODO: If player king, game over
-        //TODO: If enemy king, next stage? This may be too easy
-    }
-
-
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
     const hasPiece = (x,y,allegiance) =>{
         if(x<0||x>7||y<0||y>7||pieces[x+(8*y)].pieceType=='none'){
@@ -124,7 +117,28 @@ function Board() {
         }
     }
     
-    
+    const movePiece = (startx,starty,endx,endy) => {
+        const pieceHere=pieces[startx+(8*starty)];
+        
+        //Increment Score on kill
+        if(hasPiece(endx,endy,pieceHere.allegiance)==2)
+            scoreUpdate(prevScore => prevScore+1);
+
+
+        //TODO: If player king dies, game over
+
+        //If player king onto gold, next stage and increment score
+        if(pieceHere.pieceType=='king'&&pieceHere.allegiance=='p'&&pieces[endx+(8*endy)].blackwhite=='gold'){
+            //TODO: Go to next stage
+            scoreUpdate(prevScore => prevScore+(10*stageNumber));
+        }
+
+
+        //Actually move the piece
+        setPiece(endx,endy,pieceHere.pieceType,pieceHere.allegiance);
+        setPiece(startx,starty,'none','none');
+    }
+
     //PieceMovement is a function describing the abilities of a piece
         //given it's name and position on the board
     //INPUT: ( {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate)
