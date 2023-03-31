@@ -2,9 +2,10 @@
 //Last edited 3/29/2023
 
 
-import React, { useState, useContext } from 'react'
-import "../board.css"
-import { ScoreUpdateContext } from './Home'
+import React, { useState, useContext } from 'react';
+import "../board.css";
+import { ScoreUpdateContext, ScoreContext } from './Home';
+import {useNavigate} from 'react-router-dom';
 
 
 /*
@@ -36,6 +37,9 @@ function Board() {
     const [pieceSelected, setPieceSelected] = useState(false)
 
     const scoreUpdate = useContext(ScoreUpdateContext);
+    let score=useContext(ScoreContext)
+
+    const navigate=useNavigate();
 
     //INPUT: Attributes equivalent to those of the object in pieces
     //Adds a new element to the array pieces
@@ -196,13 +200,13 @@ function Board() {
         setPiece(endx, endy, pieceHere.pieceType, pieceHere.allegiance);
         setPiece(startx, starty, 'none', 'none');
         //Increment Score on kill
-        if (hasPiece(endx, endy, pieceHere.allegiance) == 2)
+        if (hasPiece(endx, endy, pieceHere.allegiance) == 2 && pieceHere.allegiance=='p')
             scoreUpdate(prevScore => prevScore + 1);
 
 
         //TODO: If player king dies, game over
         if (pieceThere.pieceType == 'king' && pieceThere.allegiance == 'p') {
-
+            navigate('gameover/'+score);
         }
 
         //TODO: If enemy king dies, next stage and increment score

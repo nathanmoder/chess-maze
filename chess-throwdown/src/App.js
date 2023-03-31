@@ -17,7 +17,9 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Home />}></Route>
-      <Route path='gameover' element={<GameOver />}></Route>
+      <Route path='gameover' element={<GameOver />}>
+        <Route path=':score' element={<GameOver />}></Route>
+      </Route>
       <Route path='rules' element={<Rules />}></Route>
     </Routes>
   );
