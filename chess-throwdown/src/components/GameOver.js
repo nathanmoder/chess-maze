@@ -5,7 +5,7 @@ function GameOver() {
 
   const params=useParams();
   const score=params.score;
-  const [playername,setPlayername]=useState();
+  const [playername,setPlayername]=useState('');
   const navigate=useNavigate();
 
   const getCookie = (cname) =>{
@@ -96,7 +96,7 @@ function GameOver() {
           <div>{highScores[4][0]}:{highScores[4][1]}</div>
         </ol>
       </h3>
-      <h2>Enter your name: <input type="text" value={playername} onChange={setPlayername}></input><button onClick={handleClick}>Play Again!</button></h2>
+      <h2>Enter your name: <input type="text" value={playername} onChange={e => setPlayername(e.target.value)}></input><button onClick={handleClick}>Play Again!</button></h2>
     </div>
   );
 }
