@@ -118,7 +118,7 @@ function Board() {
     }
 
     //TODO: Implement
-    const newStage = () => {
+    async function newStage(){
         console.log("in new stage")
         //Clear the board
         for (let i = 0; i < 8; i++) {
@@ -153,6 +153,7 @@ function Board() {
                 subsequentElememnts = temp
             }
             const newPiece = { pieceType: 'none', allegiance: 'none', blackwhite: _blackwhite, position: [gold[0], gold[1]] }
+            console.log("done removing old gold square");
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
         let square1 = document.getElementById('square' + index1);
@@ -178,6 +179,7 @@ function Board() {
             const newPiece = { pieceType: 'none', allegiance: 'none', blackwhite: 'gold', position: [randx, randy] }
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
+        console.log("done with new stage")
     }
 
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
@@ -218,7 +220,9 @@ function Board() {
             setStageNumber(prevStage => prevStage + 1);
             setHasStarted(false);
             newStage();
+            return true;
         }
+        return false;
 
 
     }
@@ -545,39 +549,50 @@ function Board() {
     }
 
 
-    const hideMovementRange = (x, y) => {
+    const hideMovementRange = (x, y, seizeCase, newx, newy) => {
+        console.log("in hide movement")
         const squaresToDim = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance)
         for (let i of squaresToDim) {
-            let square = document.getElementById("square" + (i[0] + (8 * i[1])))
-            const _blackwhite = pieces[i[0] + (8 * i[1])].blackwhite;
-            square.style.backgroundColor = _blackwhite
+            if(!(i[0]==newx&&i[1]==newy&&seizeCase)){
+                let square = document.getElementById("square" + (i[0] + (8 * i[1])))
+                const _blackwhite = pieces[i[0] + (8 * i[1])].blackwhite;
+                console.log(_blackwhite);
+                square.style.backgroundColor = _blackwhite;
+            }
         }
+        console.log("done with hide movement")
     }
 
     const handleClick = (x, y) => {
-        if (!pieceSelected) {
-            const square = pieces[x + y * 8]
-            if (square.pieceType != 'none') {
-                showMovementRange(x, y)
+        //if(playerTurn){
+            if (!pieceSelected) {
+                const square = pieces[x + y * 8]
+                if (square.pieceType != 'none') {
+                    showMovementRange(x, y)
+                }
+                setPieceSelected([x, y])
             }
-            setPieceSelected([x, y])
-        }
-        else {
-            const oldx = pieceSelected[0]
-            const oldy = pieceSelected[1]
-            const moveableSquares = PieceMovement(pieces[oldx + oldy * 8].pieceType, oldx, oldy, pieces[oldx + oldy * 8].allegiance)
-            let matched = false
-            for (let i of moveableSquares) {
-                if (x == i[0] && y == i[1])
-                    matched = true
+            else {
+                const oldx = pieceSelected[0]
+                const oldy = pieceSelected[1]
+                const moveableSquares = PieceMovement(pieces[oldx + oldy * 8].pieceType, oldx, oldy, pieces[oldx + oldy * 8].allegiance)
+                let matched = false
+                for (let i of moveableSquares) {
+                    if (x == i[0] && y == i[1])
+                        matched = true
+                }
+                if (matched) {
+                    const seizeCase=movePiece(oldx, oldy, x, y);
+                    hideMovementRange(oldx, oldy,seizeCase,x,y);
+                    setPieceSelected(false);
+                    //setPlayerTurn(false)
+                }
+                else{
+                hideMovementRange(oldx, oldy,false,x,y);
+                setPieceSelected(false);
+                }
             }
-            if (matched) {
-                movePiece(oldx, oldy, x, y)
-                //setPlayerTurn(false)
-            }
-            hideMovementRange(oldx, oldy)
-            setPieceSelected(false)
-        }
+        //}
     }
 
 
