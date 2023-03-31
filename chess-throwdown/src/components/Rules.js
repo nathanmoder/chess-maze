@@ -6,8 +6,13 @@ This component will create an element that, when clicked on, will
 communicate the rules of the game.
 */
 function Rules() {
+
+  const handleClick = () => {
+    alert((<div>hello!</div>))
+  }
+
   return (
-    <div>Rules</div>
+    <div onClick={handleClick}>Rules</div>
   )
 }
 

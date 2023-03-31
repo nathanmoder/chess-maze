@@ -1,5 +1,5 @@
 import React,{useContext} from 'react'
-import {ScoreContext} from './App'
+import {ScoreContext} from './Home'
 
 /*
 The Score component will be responsible for displaying the
