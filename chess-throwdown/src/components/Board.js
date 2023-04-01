@@ -6,6 +6,7 @@ import React, { useState, useContext } from 'react';
 import "../board.css";
 import { ScoreUpdateContext, ScoreContext } from './Home';
 import {useNavigate} from 'react-router-dom';
+import PieceMovement from '../PieceMovement';
 
 
 /*
@@ -66,6 +67,17 @@ function Board() {
         })
     }
 
+    const placePieces = () => {
+        setPiece(0, 0, 'rook', 'p'); setPiece(0, 7, 'rook', 'p'); setPiece(7, 0, 'rook', 'e'); setPiece(7, 7, 'rook', 'e');
+        setPiece(0, 1, 'bishop', 'p'); setPiece(0, 6, 'bishop', 'p'); setPiece(7, 1, 'bishop', 'e'); setPiece(7, 6, 'bishop', 'e');
+        setPiece(0, 2, 'knight', 'p'); setPiece(0, 5, 'knight', 'p'); setPiece(7, 2, 'knight', 'e'); setPiece(7, 5, 'knight', 'e');
+        setPiece(0, 3, 'king', 'p'); setPiece(7, 3, 'king', 'e'); setPiece(0, 4, 'queen', 'p'); setPiece(7, 4, 'queen', 'e');
+        setPiece(1, 0, 'pawn', 'p'); setPiece(1, 1, 'pawn', 'p'); setPiece(1, 2, 'pawn', 'p'); setPiece(1, 3, 'pawn', 'p');
+        setPiece(1, 4, 'pawn', 'p'); setPiece(1, 5, 'pawn', 'p'); setPiece(1, 6, 'pawn', 'p'); setPiece(1, 7, 'pawn', 'p');
+        setPiece(6, 0, 'pawn', 'e'); setPiece(6, 1, 'pawn', 'e'); setPiece(6, 2, 'pawn', 'e'); setPiece(6, 3, 'pawn', 'e');
+        setPiece(6, 4, 'pawn', 'e'); setPiece(6, 5, 'pawn', 'e'); setPiece(6, 6, 'pawn', 'e'); setPiece(6, 7, 'pawn', 'e');
+    }
+
     //INPUT: Size of the board to be instantiated
     //After executing, pieces will be full of squares both without and containing pieces
     //RETURN: None
@@ -78,15 +90,8 @@ function Board() {
                     addPiece(j, i, 'none', 'none');
             }
         }
-        //Place pieces
-        setPiece(0, 0, 'rook', 'p'); setPiece(0, 7, 'rook', 'p'); setPiece(7, 0, 'rook', 'e'); setPiece(7, 7, 'rook', 'e');
-        setPiece(0, 1, 'bishop', 'p'); setPiece(0, 6, 'bishop', 'p'); setPiece(7, 1, 'bishop', 'e'); setPiece(7, 6, 'bishop', 'e');
-        setPiece(0, 2, 'knight', 'p'); setPiece(0, 5, 'knight', 'p'); setPiece(7, 2, 'knight', 'e'); setPiece(7, 5, 'knight', 'e');
-        setPiece(0, 3, 'king', 'p'); setPiece(7, 3, 'king', 'e'); setPiece(0, 4, 'queen', 'p'); setPiece(7, 4, 'queen', 'e');
-        setPiece(1, 0, 'pawn', 'p'); setPiece(1, 1, 'pawn', 'p'); setPiece(1, 2, 'pawn', 'p'); setPiece(1, 3, 'pawn', 'p');
-        setPiece(1, 4, 'pawn', 'p'); setPiece(1, 5, 'pawn', 'p'); setPiece(1, 6, 'pawn', 'p'); setPiece(1, 7, 'pawn', 'p');
-        setPiece(6, 0, 'pawn', 'e'); setPiece(6, 1, 'pawn', 'e'); setPiece(6, 2, 'pawn', 'e'); setPiece(6, 3, 'pawn', 'e');
-        setPiece(6, 4, 'pawn', 'e'); setPiece(6, 5, 'pawn', 'e'); setPiece(6, 6, 'pawn', 'e'); setPiece(6, 7, 'pawn', 'e');
+        
+        placePieces();
 
         //Randomly place down the goal square
         const randx = Math.floor(Math.random() * 4 + 2);
@@ -127,15 +132,8 @@ function Board() {
                     setPiece(j, i, 'none', 'none');
             }
         }
-        //Place pieces
-        setPiece(0, 0, 'rook', 'p'); setPiece(0, 7, 'rook', 'p'); setPiece(7, 0, 'rook', 'e'); setPiece(7, 7, 'rook', 'e');
-        setPiece(0, 1, 'bishop', 'p'); setPiece(0, 6, 'bishop', 'p'); setPiece(7, 1, 'bishop', 'e'); setPiece(7, 6, 'bishop', 'e');
-        setPiece(0, 2, 'knight', 'p'); setPiece(0, 5, 'knight', 'p'); setPiece(7, 2, 'knight', 'e'); setPiece(7, 5, 'knight', 'e');
-        setPiece(0, 3, 'king', 'p'); setPiece(7, 3, 'king', 'e'); setPiece(0, 4, 'queen', 'p'); setPiece(7, 4, 'queen', 'e');
-        setPiece(1, 0, 'pawn', 'p'); setPiece(1, 1, 'pawn', 'p'); setPiece(1, 2, 'pawn', 'p'); setPiece(1, 3, 'pawn', 'p');
-        setPiece(1, 4, 'pawn', 'p'); setPiece(1, 5, 'pawn', 'p'); setPiece(1, 6, 'pawn', 'p'); setPiece(1, 7, 'pawn', 'p');
-        setPiece(6, 0, 'pawn', 'e'); setPiece(6, 1, 'pawn', 'e'); setPiece(6, 2, 'pawn', 'e'); setPiece(6, 3, 'pawn', 'e');
-        setPiece(6, 4, 'pawn', 'e'); setPiece(6, 5, 'pawn', 'e'); setPiece(6, 6, 'pawn', 'e'); setPiece(6, 7, 'pawn', 'e');
+        
+        placePieces();
 
         //Remove the current goal square
         const gold = findGoldSquare();
@@ -158,7 +156,7 @@ function Board() {
         })
         let square1 = document.getElementById('square' + index1);
         console.log(square1.style.backgroundColor);
-        square1.style.backgroundColor = "beige";
+        square1.style.backgroundColor = _blackwhite;
         console.log(square1.style.backgroundColor);
 
         //Randomly place down the goal square
@@ -232,326 +230,9 @@ function Board() {
 
     }
 
-    //PieceMovement is a function describing the abilities of a piece
-    //given it's name and position on the board
-    //INPUT: ( {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate)
-    //OUTPUT: an array of pairs of numbers representing the squares the piece can move to.
-    const PieceMovement = (name, x, y, allegiance) => {
-        let spaces = []
-        switch (name) {
-            case 'pawn':
-                if (allegiance == 'p') {
-                    if (hasPiece(x + 1, y, allegiance) == 0)
-                        spaces = [[x + 1, y]]
-                    if (x == 1 && hasPiece(x + 2, y, 'p') == 0)
-                        spaces = [...spaces, [x + 2, y]]
-                    console.log((hasPiece(x + 1, y + 1, 'p') === 2 ));
-                    console.log((y > 0));
-                    if ((hasPiece(x + 1, y + 1, 'p') === 2 )&& (y <7)){
-                        console.log('AH')
-                        spaces = [...spaces, [x + 1, y + 1]]
-                    }
-                    if ((hasPiece(x + 1, y - 1, 'p') === 2 )&&( y >0)){
-                        console.log('AH')
-                        spaces = [...spaces, [x + 1, y - 1]]
-                    }
-                }
-                else {
-                    if (hasPiece(x - 1, y, allegiance) == 0)
-                        spaces = [[x - 1, y]]
-                    if (x == 6 && hasPiece(x - 2, y, 'e') == 0)
-                        spaces = [...spaces, [x - 2, y]]
-                    if (hasPiece(x - 1, y + 1, 'e') == 2 && y <7)
-                        spaces = [...spaces, [x - 1, y + 1]]
-                    if (hasPiece(x - 1, y - 1, 'e') == 2 && y >0)
-                        spaces = [...spaces, [x - 1, y - 1]]
-                }
-                break;
-            case 'bishop': {
-                let collision1 = false;
-                let collision2 = false;
-                let collision3 = false;
-                let collision4 = false;
-                for (let i = 1; i <= 8; i++) {
-                    if (!collision1 && (hasPiece(x - i, y - i, allegiance) != 1) && !(x - i < 0 || y - i < 0)) {
-                        if (hasPiece(x - i, y - i, allegiance) == 0)
-                            spaces = [...spaces, [x - i, y - i]]
-                        else {
-                            spaces = [...spaces, [x - i, y - i]]
-                            collision1 = true;
-                        }
-                    }
-                    else {
-                        collision1 = true;
-                    }
-
-                    if (!collision2 && (hasPiece(x - i, y + i, allegiance) != 1) && !(x - i < 0 || y + i > 7)) {
-                        if (hasPiece(x - i, y + i, allegiance) == 0)
-                            spaces = [...spaces, [x - i, y + i]]
-                        else {
-                            spaces = [...spaces, [x - i, y + i]]
-                            collision2 = true;
-                        }
-                    }
-                    else {
-                        collision2 = true;
-                    }
-
-                    if (!collision3 && (hasPiece(x + i, y - i, allegiance) != 1) && !(x + i > 7 || y - i < 0)) {
-                        if (hasPiece(x + i, y - i, allegiance) == 0)
-                            spaces = [...spaces, [x + i, y - i]]
-                        else {
-                            spaces = [...spaces, [x + i, y - i]]
-                            collision3 = true;
-                        }
-                    }
-                    else {
-                        collision3 = true;
-                    }
-
-                    if (!collision4 && (hasPiece(x + i, y + i, allegiance) != 1) && !(x + i > 7 || y + i > 7)) {
-                        if (hasPiece(x + i, y + i, allegiance) == 0)
-                            spaces = [...spaces, [x + i, y + i]]
-                        else {
-                            spaces = [...spaces, [x + i, y + i]]
-                            collision4 = true;
-                        }
-                    }
-                    else {
-                        collision4 = true;
-                    }
-                }
-            }
-                break;
-            case 'knight':
-                if ((hasPiece(x - 1, y - 2, allegiance) != 1) && !(x - 1 < 0 || y - 2 < 0)) {
-                    spaces = [...spaces, [x - 1, y - 2]]
-                }
-                if ((hasPiece(x - 1, y + 2, allegiance) != 1) && !(x - 1 < 0 || y + 2 > 7)) {
-                    spaces = [...spaces, [x - 1, y + 2]]
-                }
-                if ((hasPiece(x + 1, y - 2, allegiance) != 1) && !(x + 1 > 7 || y - 2 < 0)) {
-                    spaces = [...spaces, [x + 1, y - 2]]
-                }
-                if ((hasPiece(x + 1, y + 2, allegiance) != 1) && !(x + 1 > 7 || y + 2 > 7)) {
-                    spaces = [...spaces, [x + 1, y + 2]]
-                }
-                if ((hasPiece(x - 2, y + 1, allegiance) != 1) && !(x - 2 < 0 || y + 1 > 7)) {
-                    spaces = [...spaces, [x - 2, y + 1]]
-                }
-                if ((hasPiece(x - 2, y - 1, allegiance) != 1) && !(x - 2 < 0 || y - 1 < 0)) {
-                    spaces = [...spaces, [x - 2, y - 1]]
-                }
-                if ((hasPiece(x + 2, y - 1, allegiance) != 1) && !(x + 2 > 7 || y - 1 < 0)) {
-                    spaces = [...spaces, [x + 2, y - 1]]
-                }
-                if ((hasPiece(x + 2, y + 1, allegiance) != 1) && !(x + 2 > 7 || y + 1 > 7)) {
-                    spaces = [...spaces, [x + 2, y + 1]]
-                }
-                break;
-            case 'rook': {
-                let collision1 = false;
-                let collision2 = false;
-                let collision3 = false;
-                let collision4 = false;
-                for (let i = 1; i <= 8; i++) {
-                    if (!collision1 && (hasPiece(x - i, y, allegiance) != 1) && !(x - i < 0)) {
-                        if (hasPiece(x - i, y, allegiance) == 0)
-                            spaces = [...spaces, [x - i, y]]
-                        else {
-                            spaces = [...spaces, [x - i, y]]
-                            collision1 = true;
-                        }
-                    }
-                    else {
-                        collision1 = true;
-                    }
-
-                    if (!collision2 && (hasPiece(x, y + i, allegiance) != 1) && !(y + i > 7)) {
-                        if (hasPiece(x, y + i, allegiance) == 0)
-                            spaces = [...spaces, [x, y + i]]
-                        else {
-                            spaces = [...spaces, [x, y + i]]
-                            collision2 = true;
-                        }
-                    }
-                    else {
-                        collision2 = true;
-                    }
-
-                    if (!collision3 && (hasPiece(x, y - i, allegiance) != 1) && !(y - i < 0)) {
-                        if (hasPiece(x, y - i, allegiance) == 0)
-                            spaces = [...spaces, [x, y - i]]
-                        else {
-                            spaces = [...spaces, [x, y - i]]
-                            collision3 = true;
-                        }
-                    }
-                    else {
-                        collision3 = true;
-                    }
-
-                    if (!collision4 && (hasPiece(x + i, y, allegiance) != 1) && !(x + i > 7)) {
-                        if (hasPiece(x + i, y, allegiance) == 0)
-                            spaces = [...spaces, [x + i, y]]
-                        else {
-                            spaces = [...spaces, [x + i, y]]
-                            collision4 = true;
-                        }
-                    }
-                    else {
-                        collision4 = true;
-                    }
-                }
-            }
-                break;
-            case 'queen': {
-                let collision1 = false;
-                let collision2 = false;
-                let collision3 = false;
-                let collision4 = false;
-                let collision5 = false;
-                let collision6 = false;
-                let collision7 = false;
-                let collision8 = false;
-                for (let i = 1; i <= 8; i++) {
-                    if (!collision1 && (hasPiece(x - i, y - i, allegiance) != 1) && !(x - i < 0 || y - i < 0)) {
-                        if (hasPiece(x - i, y - i, allegiance) == 0)
-                            spaces = [...spaces, [x - i, y - i]]
-                        else {
-                            spaces = [...spaces, [x - i, y - i]]
-                            collision1 = true;
-                        }
-                    }
-                    else {
-                        collision1 = true;
-                    }
-
-                    if (!collision2 && (hasPiece(x - i, y + i, allegiance) != 1) && !(x - i < 0 || y + i > 7)) {
-                        if (hasPiece(x - i, y + i, allegiance) == 0)
-                            spaces = [...spaces, [x - i, y + i]]
-                        else {
-                            spaces = [...spaces, [x - i, y + i]]
-                            collision2 = true;
-                        }
-                    }
-                    else {
-                        collision2 = true;
-                    }
-
-                    if (!collision3 && (hasPiece(x + i, y - i, allegiance) != 1) && !(x + i > 7 || y - i < 0)) {
-                        if (hasPiece(x + i, y - i, allegiance) == 0)
-                            spaces = [...spaces, [x + i, y - i]]
-                        else {
-                            spaces = [...spaces, [x + i, y - i]]
-                            collision3 = true;
-                        }
-                    }
-                    else {
-                        collision3 = true;
-                    }
-
-                    if (!collision4 && (hasPiece(x + i, y + i, allegiance) != 1) && !(x + i > 7 || y + i > 7)) {
-                        if (hasPiece(x + i, y + i, allegiance) == 0)
-                            spaces = [...spaces, [x + i, y + i]]
-                        else {
-                            spaces = [...spaces, [x + i, y + i]]
-                            collision4 = true;
-                        }
-                    }
-                    else {
-                        collision4 = true;
-                    }
-                    if (!collision5 && (hasPiece(x - i, y, allegiance) != 1) && !(x - i < 0)) {
-                        if (hasPiece(x - i, y, allegiance) == 0)
-                            spaces = [...spaces, [x - i, y]]
-                        else {
-                            spaces = [...spaces, [x - i, y]]
-                            collision5 = true;
-                        }
-                    }
-                    else {
-                        collision5 = true;
-                    }
-
-                    if (!collision6 && (hasPiece(x, y + i, allegiance) != 1) && !(y + i > 7)) {
-                        if (hasPiece(x, y + i, allegiance) == 0)
-                            spaces = [...spaces, [x, y + i]]
-                        else {
-                            spaces = [...spaces, [x, y + i]]
-                            collision6 = true;
-                        }
-                    }
-                    else {
-                        collision6 = true;
-                    }
-
-                    if (!collision7 && (hasPiece(x, y - i, allegiance) != 1) && !(y - i < 0)) {
-                        if (hasPiece(x, y - i, allegiance) == 0)
-                            spaces = [...spaces, [x, y - i]]
-                        else {
-                            spaces = [...spaces, [x, y - i]]
-                            collision7 = true;
-                        }
-                    }
-                    else {
-                        collision7 = true;
-                    }
-
-                    if (!collision8 && (hasPiece(x + i, y, allegiance) != 1) && !(x + i > 7)) {
-                        if (hasPiece(x + i, y, allegiance) == 0)
-                            spaces = [...spaces, [x + i, y]]
-                        else {
-                            spaces = [...spaces, [x + i, y]]
-                            collision8 = true;
-                        }
-                    }
-                    else {
-                        collision8 = true;
-                    }
-                }
-            }
-                break;
-            case 'king':
-                let i = 1
-                if ((hasPiece(x - i, y - i, allegiance) != 1) && !(x - i < 0 || y - i < 0)) {
-                    spaces = [...spaces, [x - i, y - i]]
-                }
-                if ((hasPiece(x - i, y + i, allegiance) != 1) && !(x - i < 0 || y + i > 7)) {
-                    spaces = [...spaces, [x - i, y + i]]
-                }
-                if ((hasPiece(x + i, y - i, allegiance) != 1) && !(x + i > 7 || y - i < 0)) {
-                    spaces = [...spaces, [x + i, y - i]]
-                }
-                if ((hasPiece(x + i, y + i, allegiance) != 1) && !(x + i > 7 || y + i > 7)) {
-                    spaces = [...spaces, [x + i, y + i]]
-                }
-                if ((hasPiece(x - i, y, allegiance) != 1) && !(x - i < 0)) {
-                    spaces = [...spaces, [x - i, y]]
-                }
-
-                if ((hasPiece(x, y + i, allegiance) != 1) && !(y + i > 7)) {
-                    spaces = [...spaces, [x, y + i]]
-                }
-
-                if ((hasPiece(x, y - i, allegiance) != 1) && !(y - i < 0)) {
-                    spaces = [...spaces, [x, y - i]]
-                }
-                if ((hasPiece(x + i, y, allegiance) != 1) && !(x + i > 7)) {
-                    spaces = [...spaces, [x + i, y]]
-                }
-                break;
-
-
-
-
-        }
-        return spaces
-    }
-
     const showMovementRange = (x, y) => {
         //console.log(pieces)
-        const squaresToAlight = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance)
+        const squaresToAlight = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance,pieces)
         //Sets the style of those squares to display
         for (let i of squaresToAlight) {
             let square = document.getElementById("square" + (i[0] + (8 * i[1])))
@@ -562,7 +243,7 @@ function Board() {
 
     const hideMovementRange = (x, y, seizeCase, newx, newy) => {
         console.log("in hide movement")
-        const squaresToDim = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance)
+        const squaresToDim = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance,pieces)
         for (let i of squaresToDim) {
             if(!(i[0]==newx&&i[1]==newy&&seizeCase)){
                 let square = document.getElementById("square" + (i[0] + (8 * i[1])))
@@ -586,7 +267,7 @@ function Board() {
             else {
                 const oldx = pieceSelected[0]
                 const oldy = pieceSelected[1]
-                const moveableSquares = PieceMovement(pieces[oldx + oldy * 8].pieceType, oldx, oldy, pieces[oldx + oldy * 8].allegiance)
+                const moveableSquares = PieceMovement(pieces[oldx + oldy * 8].pieceType, oldx, oldy, pieces[oldx + oldy * 8].allegiance,pieces)
                 let matched = false
                 for (let i of moveableSquares) {
                     if (x == i[0] && y == i[1])
