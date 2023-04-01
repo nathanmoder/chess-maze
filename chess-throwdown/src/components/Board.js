@@ -185,13 +185,18 @@ function Board() {
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
     const hasPiece = (x, y, allegiance) => {
         if (x < 0 || x > 7 || y < 0 || y > 7 || pieces[x + (8 * y)].pieceType == 'none') {
+            console.log("AHHHHH0")
             return 0;
         }
         else {
-            if (pieces[x + (8 * y)].allegiance == allegiance)
+            if (pieces[x + (8 * y)].allegiance == allegiance){
+                console.log("AHHHHH1")
                 return 1;
-            else
+            }
+            else{
+                console.log("AHHHHH2")
                 return 2;
+            }
         }
     }
 
@@ -240,19 +245,25 @@ function Board() {
                         spaces = [[x + 1, y]]
                     if (x == 1 && hasPiece(x + 2, y, 'p') == 0)
                         spaces = [...spaces, [x + 2, y]]
-                    if (hasPiece(x + 1, y + 1, 'p') == 2 && y > 0)
+                    console.log((hasPiece(x + 1, y + 1, 'p') === 2 ));
+                    console.log((y > 0));
+                    if ((hasPiece(x + 1, y + 1, 'p') === 2 )&& (y <7)){
+                        console.log('AH')
                         spaces = [...spaces, [x + 1, y + 1]]
-                    if (hasPiece(x + 1, y - 1, 'p') == 2 && y < 7)
+                    }
+                    if ((hasPiece(x + 1, y - 1, 'p') === 2 )&&( y >0)){
+                        console.log('AH')
                         spaces = [...spaces, [x + 1, y - 1]]
+                    }
                 }
                 else {
                     if (hasPiece(x - 1, y, allegiance) == 0)
                         spaces = [[x - 1, y]]
                     if (x == 6 && hasPiece(x - 2, y, 'e') == 0)
                         spaces = [...spaces, [x - 2, y]]
-                    if (hasPiece(x - 1, y + 1, 'e') == 2 && y > 0)
+                    if (hasPiece(x - 1, y + 1, 'e') == 2 && y <7)
                         spaces = [...spaces, [x - 1, y + 1]]
-                    if (hasPiece(x - 1, y - 1, 'e') == 2 && y < 7)
+                    if (hasPiece(x - 1, y - 1, 'e') == 2 && y >0)
                         spaces = [...spaces, [x - 1, y - 1]]
                 }
                 break;
