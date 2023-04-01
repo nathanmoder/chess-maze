@@ -611,7 +611,7 @@ function Board() {
             {
                 pieces.map(
                     e => {
-                        return (<div id={"square" + (e.position[0] + 8 * e.position[1])} className={e.allegiance + " " + e.blackwhite + " square"} onClick={(() => handleClick(e.position[0], e.position[1]))}>{e.pieceType} {e.allegiance}</div>)
+                        return (<div id={"square" + (e.position[0] + 8 * e.position[1])} className={e.allegiance + " " + e.blackwhite + " square"} onClick={(() => handleClick(e.position[0], e.position[1]))}><img src={"images/"+e.allegiance+e.pieceType+".png"} alt='a'  className="piece"></img></div>)
                     }
                 )}
         </div>
