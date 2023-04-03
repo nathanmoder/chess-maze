@@ -2,8 +2,8 @@
     //given it's name and position on the board
     //INPUT: {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate, allegiance of the piece, and a 2-d array representing the board.
     //RETURN: an array of pairs of numbers representing the squares the piece can move to.
-    function PieceMovement(name, x, y, allegiance,board){
-        
+    function PieceMovement(name, x, y,board){
+        allegiance=board[x+8*y].allegiance;
         const hasPiece = (x,y,allegiance) =>{
             if (x < 0 || x > 7 || y < 0 || y > 7 || board[x + (8 * y)].pieceType == 'none') {
                 console.log("AHHHHH0")

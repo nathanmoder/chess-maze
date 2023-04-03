@@ -31,13 +31,19 @@ function MoveAI(difficulty, squares){
 
 
     //RETURN: Pairs of coordinates corresponding to every possible move by the given player
-    const getAllMoves = (enemy)=>{
+    const getAllMoves = (_allegiance)=>{
         moves=[];
         for(let x=0; x<8; x++){
             for(let y=0; y<8; y++){
-                
+                if(squares[x+8*y].allegiance==_allegiance){
+                    movesToAdd=PieceMovement(squares[x+8*y].pieceType,x,y,squares);
+                    for(let move of movesToAdd){
+                        moves.push([[x,y],[move]]);
+                    }
+                }
             }
         }
+        return moves;
 
     }
 
@@ -45,7 +51,7 @@ function MoveAI(difficulty, squares){
     const alphaBetaMax = (a,b,depthLeft) =>{
         if(depthLeft==0)
             return valuation();
-        for(let move of getAllMoves(true)){
+        for(let move of getAllMoves('e')){
             movePiece([move[0],move[1]]);
             score=alphaBetaMin(a,b,depthLeft-1);
             movePiece([move[1],move[0]]);
@@ -60,7 +66,7 @@ function MoveAI(difficulty, squares){
     const alphaBetaMin = (a,b,depthLeft) =>{
         if(depthLeft==0)
             return valuation();
-        for(let move of getAllMoves(false)){
+        for(let move of getAllMoves('p')){
             movePiece([move[0],move[1]]);
             score=alphaBetaMax(a,b,depthLeft-1)[0];
             movePiece([move[1],move[0]]);
