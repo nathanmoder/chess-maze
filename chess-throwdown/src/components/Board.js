@@ -7,6 +7,7 @@ import "../board.css";
 import { ScoreUpdateContext, ScoreContext } from './Home';
 import {useNavigate} from 'react-router-dom';
 import PieceMovement from '../PieceMovement';
+import MoveAI from '../MoveAI';
 
 
 /*
@@ -255,8 +256,14 @@ function Board() {
         console.log("done with hide movement")
     }
 
+    const enemyMove = () =>{
+        moveToMake=MoveAI(stageNumber+1,pieces);
+        movePiece(moveToMake[0][0],moveToMake[0][1],moveToMake[1][0],moveToMake[1][1]);
+        setPlayerTurn(true);
+    }
+
     const handleClick = (x, y) => {
-        //if(playerTurn){
+        if(playerTurn){
             if (!pieceSelected) {
                 const square = pieces[x + y * 8]
                 if (square.pieceType != 'none') {
@@ -277,14 +284,15 @@ function Board() {
                     const seizeCase=movePiece(oldx, oldy, x, y);
                     hideMovementRange(oldx, oldy,seizeCase,x,y);
                     setPieceSelected(false);
-                    //setPlayerTurn(false)
+                    setPlayerTurn(false)
+                    enemyMove();
                 }
                 else{
                 hideMovementRange(oldx, oldy,false,x,y);
                 setPieceSelected(false);
                 }
             }
-        //}
+        }
     }
 
 
