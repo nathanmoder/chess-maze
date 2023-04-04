@@ -39,19 +39,59 @@ function MoveAI(difficulty, board){
                     -10,0,10,10,10,10,10,-10,
                     -10,5,0,0,0,0,5,-10,
                     -20,-10,-10,-10,-10,-10,-10,-20
-                ]
+                ];
                 pieceValue=330;
                 break;
             case 'knight':
+                locationMatrix=[
+                    -50,-40,-30,-30,-30,-30,-40,-50,
+                    -40,-20,0,0,0,0,-20,-40,
+                    -30,0,10,15,15,10,0,-30,
+                    -30,5,15,20,20,15,5,-30,
+                    -30,0,15,20,20,15,0,-30,
+                    -30,5,10,15,15,10,5,-30,
+                    -40,-20,0,5,5,0,-20,-40,
+                    -50,-40,-30,-30,-30,-30,-40,-50,
+                ];
                 pieceValue=320;
                 break;
             case 'rook':
+                locationMatrix=[
+                    0,-5,-5,-5,-5,-5,5,0,
+                    0,0,0,0,0,0,10,0,
+                    0,0,0,0,0,0,10,0,
+                    5,0,0,0,0,0,10,0,
+                    5,0,0,0,0,0,10,0,
+                    0,0,0,0,0,0,10,0,
+                    0,0,0,0,0,0,10,0,
+                    0,-5,-5,-5,-5,-5,5,0,
+                ];
                 pieceValue=500;
                 break;
             case 'queen':
+                locationMatrix=[
+                    -20,-10,-10,0,-5,-10,-10,-20,
+                    -10,0,5,0,0,0,0,-10,
+                    -10,5,5,5,5,5,0,-10,
+                    -5,0,5,5,5,5,0,-5,
+                    -5,0,5,5,5,5,0,-5,
+                    -10,0,5,5,5,5,0,-10,
+                    -10,0,0,0,0,0,0,-10,
+                    -20,-10,-10,-5,-5,-10,-10,-20,
+                ];
                 pieceValue=900;
                 break;
             case 'king':
+                locationMatrix=[
+                    20,20,-10,-20,-30,-30,-30,-30,
+                    30,20,-20,-30,-40,-40,-40,-40,
+                    10,0,-20,-30,-40,-40,-40,-40,
+                    0,0,-20,-40,-50,-50,-50,-50,
+                    0,0,-20,-40,-50,-50,-50,-50,
+                    10,0,-20,-30,-40,-40,-40,-40,
+                    30,20,-20,-30,-40,-40,-40,-40,
+                    20,20,-10,-20,-30,-30,-30,-30,
+                ];
                 pieceValue=20000;
                 break;
         }
@@ -75,7 +115,7 @@ function MoveAI(difficulty, board){
                 total=total+valuePieceAt(x,y);
             }
         }
-        console.log(board);
+        //console.log(board);
         return total;
     }
 
@@ -103,8 +143,8 @@ function MoveAI(difficulty, board){
         return moves;
 
     }
-
-    //Augmented from the template at https://www.chessprogramming.org/Alpha-Beta
+    
+    //Augmented from the template at https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
     const alphaBetaMax = (a,b,depthLeft) =>{
         if(depthLeft==0){
             //console.log('valueMAX:'+valuation());
@@ -114,12 +154,14 @@ function MoveAI(difficulty, board){
             let oldPiece=board[move[1][0][0]+8*move[1][0][1]];
             movePiece([move[0],move[1][0]],'none','none');
             let score=alphaBetaMin(a,b,depthLeft-1,board);
-            console.log(score);
+            console.log("score in max:"+score);
             movePiece([move[1][0],move[0]],oldPiece.pieceType,oldPiece.allegiance);
             if(score >= b)
                 return b;
-            if(score > a)
+            if(score > a[0]){
+                console.log("override with score "+score);
                 a=[score,[move[0],move[1][0]]];
+            }
         }
         return a;
     }
@@ -133,10 +175,10 @@ function MoveAI(difficulty, board){
             let oldPiece=board[move[1][0][0]+8*move[1][0][1]];
             movePiece([move[0],move[1][0]],'none','none');
             let score=alphaBetaMax(a,b,depthLeft-1,board)[0];
-            console.log(score);
+            console.log("score in min:"+score);
             movePiece([move[1][0],move[0]],oldPiece.pieceType,oldPiece.allegiance);
-            if(score <= a)
-                return a;
+            if(score <= a[0])
+                return a[0];
             if(score < b)
                 b=score;
         }
@@ -144,9 +186,15 @@ function MoveAI(difficulty, board){
 
     }
 
-    let toReturn=alphaBetaMax(alpha,beta,difficulty);
+    let toReturn=alphaBetaMax([alpha,[[0,0],[0,0]]],beta,difficulty);
     console.log(toReturn);
     return toReturn;
+    
+    //const alphaBetaRoot = () =>{
+    //    let moves=getAllMoves();
+    //    let bestMoveValue=-9999
+    //}
+    
 }
 
 export default MoveAI;
