@@ -2,7 +2,7 @@
 //Last edited 3/29/2023
 
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext , useEffect} from 'react';
 import "../board.css";
 import { ScoreUpdateContext, ScoreContext } from './Home';
 import {useNavigate} from 'react-router-dom';
@@ -211,7 +211,7 @@ function Board() {
             scoreUpdate(prevScore => prevScore + 1);
 
 
-        //TODO: If player king dies, game over
+        //If player king dies, game over
         if (pieceThere.pieceType == 'king' && pieceThere.allegiance == 'p') {
             navigate('gameover/'+score);
         }
@@ -222,9 +222,9 @@ function Board() {
         if (pieceHere.pieceType == 'king' && pieceHere.allegiance == 'p' && pieceThere.blackwhite == 'gold') {
             //TODO: Go to next stage
             scoreUpdate(prevScore => prevScore + (10 * stageNumber));
+            setPlayerTurn(true);
             setStageNumber(prevStage => prevStage + 1);
-            setHasStarted(false);
-            newStage();
+            //REWRITE AS A USE EFFECT
             return true;
         }
         return false;
@@ -257,13 +257,24 @@ function Board() {
         console.log("done with hide movement")
     }
 
-    const enemyMove = () =>{
+    //REWRITE AS A USE EFFECT
+    /*const enemyMove = () =>{
         let temp=[...pieces]
         const moveToMake=MoveAI(stageNumber+1,temp);
         console.log(moveToMake);
         movePiece(moveToMake[1][0][0],moveToMake[1][0][1],moveToMake[1][1][0],moveToMake[1][1][1]);
         setPlayerTurn(true);
-    }
+    }*/
+
+    useEffect(()=>{
+        if(!playerTurn){
+            let temp=[...pieces]
+            const moveToMake=MoveAI(stageNumber+1,temp);
+            console.log(moveToMake);
+            movePiece(moveToMake[1][0][0],moveToMake[1][0][1],moveToMake[1][1][0],moveToMake[1][1][1]);
+            setPlayerTurn(true);
+        }
+    },[playerTurn]);
 
     const handleClick = (x, y) => {
         if(playerTurn){
@@ -287,8 +298,10 @@ function Board() {
                     const seizeCase=movePiece(oldx, oldy, x, y);
                     hideMovementRange(oldx, oldy,seizeCase,x,y);
                     setPieceSelected(false);
-                    setPlayerTurn(false)
-                    enemyMove();
+                    if(!seizeCase)
+                        setPlayerTurn(false)
+                    //REWRITE AS A USE EFFECT
+                    //enemyMove();
                 }
                 else{
                 hideMovementRange(oldx, oldy,false,x,y);
@@ -300,7 +313,8 @@ function Board() {
 
 
     //Initializes the board if this has not yet been done, or if a new stage is starting
-    if (!hasStarted) {
+    //REWRITE AS A USE EFFECT
+    /*if (!hasStarted) {
         setHasStarted(prevStart => true)
         if (stageNumber == 1) {
             initializeBoard()
@@ -309,6 +323,18 @@ function Board() {
             // newStage()
         }
     }
+    */
+    useEffect(()=>{
+        if (stageNumber !=1){
+            newStage();
+        }
+    },[stageNumber])
+    useEffect(()=>{
+        if(!hasStarted){
+            setHasStarted(true);
+            initializeBoard();
+        }
+    },[])
     return (
         <div id="board">
             {
