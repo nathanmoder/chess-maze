@@ -184,22 +184,23 @@ function Board() {
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
     const hasPiece = (x, y, allegiance) => {
         if (x < 0 || x > 7 || y < 0 || y > 7 || pieces[x + (8 * y)].pieceType == 'none') {
-            console.log("AHHHHH0")
+            //console.log("AHHHHH0")
             return 0;
         }
         else {
             if (pieces[x + (8 * y)].allegiance == allegiance){
-                console.log("AHHHHH1")
+                //console.log("AHHHHH1")
                 return 1;
             }
             else{
-                console.log("AHHHHH2")
+                //console.log("AHHHHH2")
                 return 2;
             }
         }
     }
 
     const movePiece = (startx, starty, endx, endy) => {
+        //console.log(startx);
         const pieceHere = pieces[startx + (8 * starty)];
         const pieceThere = pieces[endx + (8 * endy)];
         //Actually move the piece
@@ -233,7 +234,7 @@ function Board() {
 
     const showMovementRange = (x, y) => {
         //console.log(pieces)
-        const squaresToAlight = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance,pieces)
+        const squaresToAlight = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces)
         //Sets the style of those squares to display
         for (let i of squaresToAlight) {
             let square = document.getElementById("square" + (i[0] + (8 * i[1])))
@@ -244,7 +245,7 @@ function Board() {
 
     const hideMovementRange = (x, y, seizeCase, newx, newy) => {
         console.log("in hide movement")
-        const squaresToDim = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces[x + y * 8].allegiance,pieces)
+        const squaresToDim = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces)
         for (let i of squaresToDim) {
             if(!(i[0]==newx&&i[1]==newy&&seizeCase)){
                 let square = document.getElementById("square" + (i[0] + (8 * i[1])))
@@ -257,8 +258,10 @@ function Board() {
     }
 
     const enemyMove = () =>{
-        moveToMake=MoveAI(stageNumber+1,pieces);
-        movePiece(moveToMake[0][0],moveToMake[0][1],moveToMake[1][0],moveToMake[1][1]);
+        let temp=[...pieces]
+        const moveToMake=MoveAI(stageNumber+1,temp);
+        console.log(moveToMake);
+        movePiece(moveToMake[1][0][0],moveToMake[1][0][1],moveToMake[1][1][0],moveToMake[1][1][1]);
         setPlayerTurn(true);
     }
 
@@ -274,7 +277,7 @@ function Board() {
             else {
                 const oldx = pieceSelected[0]
                 const oldy = pieceSelected[1]
-                const moveableSquares = PieceMovement(pieces[oldx + oldy * 8].pieceType, oldx, oldy, pieces[oldx + oldy * 8].allegiance,pieces)
+                const moveableSquares = PieceMovement(pieces[oldx + oldy * 8].pieceType, oldx, oldy, pieces)
                 let matched = false
                 for (let i of moveableSquares) {
                     if (x == i[0] && y == i[1])
