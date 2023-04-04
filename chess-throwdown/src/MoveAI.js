@@ -14,14 +14,46 @@ function MoveAI(difficulty, board){
         //for the values of pieces and the location matrices.
     //RETURN: The value(for enemy pieces) of the piece at x,y
     const valuePieceAt = (x,y) =>{
+        locationMatrix=[];
+        pieceValue=0;
+        //A case statement which sets locationMatrix depending on the type of piece, and the value of the piece.
+        switch(board[x+8*y].pieceType){
+            case 'pawn':
+                pieceValue=100;
+                break;
+            case 'bishop':
+                pieceValue=330;
+                break;
+            case 'knight':
+                pieceValue=320;
+                break;
+            case 'rook':
+                pieceValue=500;
+                break;
+            case 'queen':
+                pieceValue=900;
+                break;
+            case 'king':
+                pieceValue=20000;
+                break;
+        }
 
+        allegianceSign=1;
+        if(board[x+8*y].allegiance=='p')
+            allegianceSign=-1;
+        return (pieceValue+locationMatrix[x,y])*allegianceSign;
     }
 
     
     //RETURN: The comparative strength of each side of the board at each stage
         //A desirable outcome for the cpu player.
     const valuation = () =>{
-
+        total=0;
+        for(let x=0; x<8; x++){
+            for(let y=0; y<8; y++){
+                total+=valuePieceAt(x,y);
+            }
+        }
     }
 
     //Updates the board with the new move
