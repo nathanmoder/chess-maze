@@ -214,7 +214,7 @@ function MoveAI(difficulty, board){
     
     const alphaBeta = (depth,alpha,beta,isMaximisingPlayer) =>{
         if(depth===0){
-            return -valuation();
+            return valuation();
         }
 
         //////////Case for the enemy side
