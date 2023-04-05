@@ -269,9 +269,9 @@ function Board() {
     useEffect(()=>{
         if(!playerTurn){
             let temp=[...pieces]
-            const moveToMake=MoveAI(stageNumber+1,temp);
-            console.log(moveToMake);
-            movePiece(moveToMake[1][0][0],moveToMake[1][0][1],moveToMake[1][1][0],moveToMake[1][1][1]);
+            const moveToMake=MoveAI((stageNumber<4?stageNumber:4),temp);
+            //console.log(moveToMake);
+            movePiece(moveToMake[0][0],moveToMake[0][1],moveToMake[1][0],moveToMake[1][1]);
             setPlayerTurn(true);
         }
     },[playerTurn]);

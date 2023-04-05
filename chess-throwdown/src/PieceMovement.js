@@ -34,11 +34,11 @@
                     //console.log((hasPiece(x + 1, y + 1, 'p', board) === 2 ));
                     //console.log((y > 0));
                     if ((hasPiece(x + 1, y + 1, 'p', board) === 2 )&& (y <7)){
-                        console.log('AH')
+                        //console.log('AH')
                         spaces = [...spaces, [x + 1, y + 1]]
                     }
                     if ((hasPiece(x + 1, y - 1, 'p', board) === 2 )&&( y >0)){
-                        console.log('AH')
+                        //console.log('AH')
                         spaces = [...spaces, [x + 1, y - 1]]
                     }
                 }
