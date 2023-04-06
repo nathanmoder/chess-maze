@@ -54,6 +54,8 @@ function Board() {
     const timer=useContext(TimeContext);
     const [startTime,setStartTime]=useState(Date.now());
 
+    const moveSound=new Audio('/sounds/move.mp3');
+
     //Adds a new element to the array pieces
     //INPUT: Attributes equivalent to those of the object in pieces
     //RETURN: None
@@ -113,7 +115,7 @@ function Board() {
         placePieces();
 
         //Randomly place down the goal square
-        const randx = Math.floor(Math.random() * 4 + 3);
+        const randx = Math.floor(Math.random() * 3 + 3);
         const randy = Math.floor(Math.random() * 8);
         const index = randx + (8 * randy)
         setPieces(prevPieces => {
@@ -220,6 +222,7 @@ function Board() {
     //INPUT:coordinates representing the start and end of movement.
     //RETURN: True if the player wins with this move, false otherwise.
     const movePiece = (startx, starty, endx, endy) => {
+        moveSound.play();
         const pieceHere = pieces[startx + (8 * starty)];
         const pieceThere = pieces[endx + (8 * endy)];
 
