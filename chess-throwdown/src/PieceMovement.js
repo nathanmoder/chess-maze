@@ -1,23 +1,23 @@
     //PieceMovement is a function describing the abilities of a piece
     //given it's name and position on the board
-    //INPUT: {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate, allegiance of the piece, and a 2-d array representing the board.
+    //INPUT: {"king","queen","rook","knight","bishop","pawn"} , x-coordinate, y-coordinate, allegiance of the piece, and an array representing the board.
     //RETURN: an array of pairs of numbers representing the squares the piece can move to.
     function PieceMovement(name, x, y,board){
-        //console.log(board);
         let allegiance=board[x+8*y].allegiance;
+        
+        //Evaluates the occupation of a given square relative to a selected piece.
+        //INPUT: x- and y-coordinates to be investigated, the allegiance of
+            //the input piece, and an array representing the board.
+        //RETURN: 0 if none, 1 if friendly, 2 if enemy
         const hasPiece = (x,y,allegiance,board) =>{
-            //console.log(board);
             if (x < 0 || x > 7 || y < 0 || y > 7 || board[x + (8 * y)].pieceType == 'none') {
-                //console.log("AHHHHH0")
                 return 0;
             }
             else {
                 if (board[x + (8 * y)].allegiance == allegiance){
-                    //console.log("AHHHHH1")
                     return 1;
                 }
                 else{
-                    //console.log("AHHHHH2")
                     return 2;
                 }
             }
@@ -31,14 +31,10 @@
                         spaces = [[x + 1, y]]
                     if (x == 1 && hasPiece(x + 2, y, 'p', board) == 0)
                         spaces = [...spaces, [x + 2, y]]
-                    //console.log((hasPiece(x + 1, y + 1, 'p', board) === 2 ));
-                    //console.log((y > 0));
                     if ((hasPiece(x + 1, y + 1, 'p', board) === 2 )&& (y <7)){
-                        //console.log('AH')
                         spaces = [...spaces, [x + 1, y + 1]]
                     }
                     if ((hasPiece(x + 1, y - 1, 'p', board) === 2 )&&( y >0)){
-                        //console.log('AH')
                         spaces = [...spaces, [x + 1, y - 1]]
                     }
                 }

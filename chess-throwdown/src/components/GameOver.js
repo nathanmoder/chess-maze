@@ -1,18 +1,34 @@
-import React, {useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../static/gameover.css'
 
 function GameOver() {
 
-  const params=useParams();
-  const score=params.score;
-  const [playername,setPlayername]=useState('');
-  const navigate=useNavigate();
+  //Takes parameters from the URL to evaluate the score
+    //that the player recieved. Note that this is vulnerable
+    //to an easy exploit; one could get a high score by typing in
+    //the URL .../gameover/{some high number}. This method is used
+    //not because it is secure, but simply to diversify the number
+    //of data-passing methods used in this project. One could instead
+    //use a useContext hook for a secure method.
+  const params = useParams();
+  const score = params.score;
 
-  const getCookie = (cname) =>{
+  //A hook used to let the player enter a username.
+  const [playername, setPlayername] = useState('');
+
+  //A hook used to navigate back to the main game.
+  const navigate = useNavigate();
+
+
+  //Searches for a cookie.
+  //INPUT: the string name of a cookie to search for.
+  //RETURN: the value of the named cookie as a string.
+  const getCookie = (cname) => {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
@@ -25,61 +41,64 @@ function GameOver() {
   }
 
   //Decodes the cookies to get a more useable array
-  //RETURN: An array of [string name, number score] of length 5
+  //INPUT: None
+  //RETURN: An array of [string name, number score] of length 5.
     //Default values will be filled in if the cookie has less than 5 scores.
-  const getHighScores=()=>{
-    const p1name=getCookie('rank1');
-    if(p1name==''){
+  const getHighScores = () => {
+    const p1name = getCookie('rank1');
+    if (p1name == '') {
       //The default cookie for new players
-      document.cookie='score1=100'
-      document.cookie='score2=80'
-      document.cookie='score3=60'
-      document.cookie='score4=40'
-      document.cookie='score5=20'
-      document.cookie='rank1=NM'
-      document.cookie='rank2=NM'
-      document.cookie='rank3=NM'
-      document.cookie='rank4=NM'
-      document.cookie='rank5=NM'
+      document.cookie = 'score1=100'
+      document.cookie = 'score2=80'
+      document.cookie = 'score3=60'
+      document.cookie = 'score4=40'
+      document.cookie = 'score5=9'
+      document.cookie = 'rank1=NM'
+      document.cookie = 'rank2=NM'
+      document.cookie = 'rank3=NM'
+      document.cookie = 'rank4=NM'
+      document.cookie = 'rank5=NM'
     }
-    return [[getCookie('rank1'),Number(getCookie('score1'))],[getCookie('rank2'),Number(getCookie('score2'))],[getCookie('rank3'),Number(getCookie('score3'))],[getCookie('rank4'),Number(getCookie('score4'))],[getCookie('rank5'),Number(getCookie('score5'))]];
+    return [[getCookie('rank1'), Number(getCookie('score1'))], [getCookie('rank2'), Number(getCookie('score2'))], [getCookie('rank3'), Number(getCookie('score3'))], [getCookie('rank4'), Number(getCookie('score4'))], [getCookie('rank5'), Number(getCookie('score5'))]];
   }
 
   //An array of [string name, number score]
-  const highScores=getHighScores();
+  const highScores = getHighScores();
 
+  //Finds the placement of this current player's current score.
+  //INPUT: None
   //RETURN: An integer 0-5 of the ranking of this current score.
     //A return of 0 means that it is lower than all current high scores.
-  const findScoreRanking= () => {
-    let thisRank=0;
-    let i=0;let found=false;
-    while(i<5&&!found){
-      if(score>highScores[i][1]){
-        found=true;
-        return i+1;
+  const findScoreRanking = () => {
+    let thisRank = 0;
+    let i = 0; let found = false;
+    while (i < 5 && !found) {
+      if (score > highScores[i][1]) {
+        found = true;
+        return i + 1;
       }
       i++;
     }
     return 0;
   }
 
-  //INPUT: an array of pairs
   //Will take the user's new name and score and, if applicable, add it to the appropriate spot in the cookie,
-    //shifting the other scores. It will then navigate the user back to the home page
-    //to play another game.
+  //shifting the other scores. It will then navigate the user back to the home page
+  //to play another game.
+  //INPUT: None
   //RETURN: None
-  const handleClick=(scores)=>{
-    const rank=findScoreRanking()
-    if(rank>0){
-      for(let i=4;i>=rank;i--){
+  const handleClick = () => {
+    const rank = findScoreRanking()
+    if (rank > 0) {
+      for (let i = 4; i >= rank; i--) {
         //move this score down 1 spot
-        document.cookie='score'+(i+1)+'='+highScores[i-1][1];
-        document.cookie='rank'+(i+1)+'='+highScores[i-1][0];
+        document.cookie = 'score' + (i + 1) + '=' + highScores[i - 1][1];
+        document.cookie = 'rank' + (i + 1) + '=' + highScores[i - 1][0];
       }
-      document.cookie='score'+rank+"="+score;
-      document.cookie='rank'+rank+"="+playername;
+      //insert the new score
+      document.cookie = 'score' + rank + "=" + score;
+      document.cookie = 'rank' + rank + "=" + playername;
     }
-
     navigate('../')
   }
 

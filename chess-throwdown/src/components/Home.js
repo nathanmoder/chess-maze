@@ -1,5 +1,4 @@
 import React from 'react'
-import Rules from './Rules';
 import Score from './Score';
 import Board from './Board';
 import { useState, createContext } from "react";

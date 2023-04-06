@@ -1,5 +1,5 @@
-import React,{useContext} from 'react'
-import {ScoreContext} from './Home'
+import React, { useContext } from 'react'
+import { ScoreContext } from './Home'
 
 /*
 The Score component will be responsible for displaying the
@@ -8,7 +8,7 @@ player's personal high score.
 */
 
 function Score() {
-  let score=useContext(ScoreContext)
+  let score = useContext(ScoreContext)
   return (
     <div>Score: {score}</div>
   )

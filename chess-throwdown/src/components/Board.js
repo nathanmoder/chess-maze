@@ -2,10 +2,10 @@
 //Last edited 3/29/2023
 
 
-import React, { useState, useContext , useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import "../board.css";
 import { ScoreUpdateContext, ScoreContext } from './Home';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PieceMovement from '../PieceMovement';
 import MoveAI from '../MoveAI';
 
@@ -22,35 +22,43 @@ detecting game overs, and allowing for piece movement.
 */
 
 function Board() {
-    //pieces will store an array of objects with four attributes.
-    //it will later be augmented by the addPiece and initializeBoard functions
+    //Pieces will store an array of objects with four attributes.
+        //It will later be augmented by the addPiece, setPiece, newStage, and initializeBoard functions.
     const [pieces, setPieces] = useState([{ pieceType: 'none', allegiance: 'none', blackwhite: 'beige', position: [0, 0] }])
 
-    //keeps track of whether or not the game has begun, so that initializeBoard
-    //is not called excessively
+    //Keeps track of whether or not the game has begun, so that initializeBoard
+        //is not called excessively.
     const [hasStarted, setHasStarted] = useState(false)
 
-    //keeps track of whose turn it is
+    //Keeps track of whose turn it is.
     const [playerTurn, setPlayerTurn] = useState(true)
 
-    //keeps track of what stage the player is on.
+    //Keeps track of what stage the player is on.
     const [stageNumber, setStageNumber] = useState(1)
 
+    //Keeps track of the coordinatees of the piece selected by the player, OR the boolean false
+        //when the player has selected no piece at all.
     const [pieceSelected, setPieceSelected] = useState(false)
 
+    //Allows the component to update the score. Used when taking pieces and moving on
+        //to new stages.
     const scoreUpdate = useContext(ScoreUpdateContext);
-    let score=useContext(ScoreContext)
+    
+    //Allow the component to properly navigate to the game over screen.
+    let score = useContext(ScoreContext)
+    const navigate = useNavigate();
 
-    const navigate=useNavigate();
-
-    //INPUT: Attributes equivalent to those of the object in pieces
     //Adds a new element to the array pieces
+    //INPUT: Attributes equivalent to those of the object in pieces
     //RETURN: None
     const addPiece = (_x, _y, _pieceType, _allegiance) => {
         const _blackwhite = (_x + _y) % 2 === 0 ? 'beige' : 'green';
         setPieces(prevPieces => [...prevPieces, { pieceType: _pieceType, allegiance: _allegiance, blackwhite: _blackwhite, position: [_x, _y] }])
     }
 
+    //Replaces an element in the array pieces
+    //INPUT: Attributes equivalent to those of the object in pieces
+    //RETURN: None
     const setPiece = (_x, _y, _pieceType, _allegiance) => {
         const index = _x + (8 * _y)
         setPieces(prevPieces => {
@@ -68,6 +76,9 @@ function Board() {
         })
     }
 
+    //Places the pieces in their starting positions
+    //INPUT: None
+    //RETURN: None
     const placePieces = () => {
         setPiece(0, 0, 'rook', 'p'); setPiece(0, 7, 'rook', 'p'); setPiece(7, 0, 'rook', 'e'); setPiece(7, 7, 'rook', 'e');
         setPiece(0, 1, 'bishop', 'p'); setPiece(0, 6, 'bishop', 'p'); setPiece(7, 1, 'bishop', 'e'); setPiece(7, 6, 'bishop', 'e');
@@ -79,6 +90,7 @@ function Board() {
         setPiece(6, 4, 'pawn', 'e'); setPiece(6, 5, 'pawn', 'e'); setPiece(6, 6, 'pawn', 'e'); setPiece(6, 7, 'pawn', 'e');
     }
 
+    //Function to start the game.
     //INPUT: Size of the board to be instantiated
     //After executing, pieces will be full of squares both without and containing pieces
     //RETURN: None
@@ -91,7 +103,7 @@ function Board() {
                     addPiece(j, i, 'none', 'none');
             }
         }
-        
+
         placePieces();
 
         //Randomly place down the goal square
@@ -113,7 +125,9 @@ function Board() {
         })
     }
 
-    //TODO: Implement
+    //Finds the coordinates of the gold square.
+    //INPUT: None
+    //RETURN: [x,y] representing the location of the gold square.
     const findGoldSquare = () => {
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; ++j) {
@@ -123,9 +137,10 @@ function Board() {
         }
     }
 
-    //TODO: Implement
-    async function newStage(){
-        console.log("in new stage")
+    //Function that handles moving on to a new stage.
+    //INPUT: None
+    //RETURN: None
+    async function newStage() {
         //Clear the board
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
@@ -133,12 +148,11 @@ function Board() {
                     setPiece(j, i, 'none', 'none');
             }
         }
-        
+
         placePieces();
 
         //Remove the current goal square
         const gold = findGoldSquare();
-        console.log(gold);
         const _blackwhite = (gold[0] + gold[1]) % 2 === 0 ? 'beige' : 'green';
         const index1 = gold[0] + (8 * gold[1]);
         setPieces(prevPieces => {
@@ -156,9 +170,7 @@ function Board() {
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
         let square1 = document.getElementById('square' + index1);
-        console.log(square1.style.backgroundColor);
         square1.style.backgroundColor = _blackwhite;
-        console.log(square1.style.backgroundColor);
 
         //Randomly place down the goal square
         const randx = Math.floor(Math.random() * 4 + 2);
@@ -178,62 +190,65 @@ function Board() {
             const newPiece = { pieceType: 'none', allegiance: 'none', blackwhite: 'gold', position: [randx, randy] }
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
-        console.log("done with new stage")
     }
 
+    //Evaluates the occupation of a given square relative to a selected piece.
+    //INPUT: x- and y-coordinates to be investigated, the allegiance of
+        //the input piece, and an array representing the board.
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
     const hasPiece = (x, y, allegiance) => {
         if (x < 0 || x > 7 || y < 0 || y > 7 || pieces[x + (8 * y)].pieceType == 'none') {
-            //console.log("AHHHHH0")
             return 0;
         }
         else {
-            if (pieces[x + (8 * y)].allegiance == allegiance){
-                //console.log("AHHHHH1")
+            if (pieces[x + (8 * y)].allegiance == allegiance) {
                 return 1;
             }
-            else{
-                //console.log("AHHHHH2")
+            else {
                 return 2;
             }
         }
     }
 
+    //Handles the moving of pieces on both sides.
+        //It also navigates to the game over screen on a loss.
+    //INPUT:coordinates representing the start and end of movement.
+    //RETURN: True if the player wins with this move, false otherwise.
     const movePiece = (startx, starty, endx, endy) => {
-        //console.log(startx);
         const pieceHere = pieces[startx + (8 * starty)];
         const pieceThere = pieces[endx + (8 * endy)];
+
         //Actually move the piece
         setPiece(endx, endy, pieceHere.pieceType, pieceHere.allegiance);
         setPiece(startx, starty, 'none', 'none');
-        //Increment Score on kill
-        if (hasPiece(endx, endy, pieceHere.allegiance) == 2 && pieceHere.allegiance=='p')
-            scoreUpdate(prevScore => prevScore + 1);
 
+        //Increment Score on kill
+        if (hasPiece(endx, endy, pieceHere.allegiance) == 2 && pieceHere.allegiance == 'p')
+            scoreUpdate(prevScore => prevScore + 1);
 
         //If player king dies, game over
         if (pieceThere.pieceType == 'king' && pieceThere.allegiance == 'p') {
-            navigate('gameover/'+score);
+            navigate('gameover/' + score);
         }
 
         //TODO: If enemy king dies, next stage and increment score
 
         //If player king onto gold, next stage and increment score
         if (pieceHere.pieceType == 'king' && pieceHere.allegiance == 'p' && pieceThere.blackwhite == 'gold') {
-            //TODO: Go to next stage
             scoreUpdate(prevScore => prevScore + (10 * stageNumber));
             setPlayerTurn(true);
             setStageNumber(prevStage => prevStage + 1);
-            //REWRITE AS A USE EFFECT
             return true;
         }
+
         return false;
-
-
     }
 
+    //Displays the squares a piece can move to.
+    //INPUT: Coordinates of a piece.
+    //Changes the color of all squares a piece can move to to red.
+    //RETURN: None
     const showMovementRange = (x, y) => {
-        //console.log(pieces)
         const squaresToAlight = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces)
         //Sets the style of those squares to display
         for (let i of squaresToAlight) {
@@ -242,48 +257,42 @@ function Board() {
         }
     }
 
-
+    //Hides the squares a piece can move to.
+    //INPUT: Coordinates of a piece.
+    //Changes the color of all squares a piece can move to back to their original.
+    //RETURN: None
     const hideMovementRange = (x, y, seizeCase, newx, newy) => {
-        console.log("in hide movement")
         const squaresToDim = PieceMovement(pieces[x + y * 8].pieceType, x, y, pieces)
         for (let i of squaresToDim) {
-            if(!(i[0]==newx&&i[1]==newy&&seizeCase)){
+            if (!(i[0] == newx && i[1] == newy && seizeCase)) {
                 let square = document.getElementById("square" + (i[0] + (8 * i[1])))
                 const _blackwhite = pieces[i[0] + (8 * i[1])].blackwhite;
-                console.log(_blackwhite);
                 square.style.backgroundColor = _blackwhite;
             }
         }
-        console.log("done with hide movement")
     }
 
-    //REWRITE AS A USE EFFECT
-    /*const enemyMove = () =>{
-        let temp=[...pieces]
-        const moveToMake=MoveAI(stageNumber+1,temp);
-        console.log(moveToMake);
-        movePiece(moveToMake[1][0][0],moveToMake[1][0][1],moveToMake[1][1][0],moveToMake[1][1][1]);
-        setPlayerTurn(true);
-    }*/
-
-    useEffect(()=>{
-        if(!playerTurn){
-            let temp=[...pieces]
-            const moveToMake=MoveAI((stageNumber<4?stageNumber:4),temp);
-            //console.log(moveToMake);
-            movePiece(moveToMake[0][0],moveToMake[0][1],moveToMake[1][0],moveToMake[1][1]);
+    //Handles the enemy AI
+    useEffect(() => {
+        if (!playerTurn) {
+            let temp = [...pieces]
+            const moveToMake = MoveAI((stageNumber < 4 ? stageNumber : 4), temp);
+            movePiece(moveToMake[0][0], moveToMake[0][1], moveToMake[1][0], moveToMake[1][1]);
             setPlayerTurn(true);
         }
-    },[playerTurn]);
+    }, [playerTurn]);
 
+    //Handles clicking on a square.
+    //INPUT: The coordinates of the square being clicked
+    //RETURN: None
     const handleClick = (x, y) => {
-        if(playerTurn){
+        if (playerTurn) {
             if (!pieceSelected) {
                 const square = pieces[x + y * 8]
-                if (square.pieceType != 'none') {
+                if (square.pieceType != 'none' && square.allegiance == 'p') {
                     showMovementRange(x, y)
+                    setPieceSelected([x, y])
                 }
-                setPieceSelected([x, y])
             }
             else {
                 const oldx = pieceSelected[0]
@@ -295,52 +304,40 @@ function Board() {
                         matched = true
                 }
                 if (matched) {
-                    const seizeCase=movePiece(oldx, oldy, x, y);
-                    hideMovementRange(oldx, oldy,seizeCase,x,y);
+                    const seizeCase = movePiece(oldx, oldy, x, y);
+                    hideMovementRange(oldx, oldy, seizeCase, x, y);
                     setPieceSelected(false);
-                    if(!seizeCase)
+                    if (!seizeCase)
                         setPlayerTurn(false)
-                    //REWRITE AS A USE EFFECT
-                    //enemyMove();
                 }
-                else{
-                hideMovementRange(oldx, oldy,false,x,y);
-                setPieceSelected(false);
+                else {
+                    hideMovementRange(oldx, oldy, false, x, y);
+                    setPieceSelected(false);
                 }
             }
         }
     }
 
-
-    //Initializes the board if this has not yet been done, or if a new stage is starting
-    //REWRITE AS A USE EFFECT
-    /*if (!hasStarted) {
-        setHasStarted(prevStart => true)
-        if (stageNumber == 1) {
-            initializeBoard()
-        }
-        else {
-            // newStage()
-        }
-    }
-    */
-    useEffect(()=>{
-        if (stageNumber !=1){
+    //Handles the calling of newStage at the proper time
+    useEffect(() => {
+        if (stageNumber != 1) {
             newStage();
         }
-    },[stageNumber])
-    useEffect(()=>{
-        if(!hasStarted){
+    }, [stageNumber])
+
+    //Handles initialization
+    useEffect(() => {
+        if (!hasStarted) {
             setHasStarted(true);
             initializeBoard();
         }
-    },[])
+    }, [])
     return (
         <div id="board">
             {
                 pieces.map(
                     e => {
-                        return (<div id={"square" + (e.position[0] + 8 * e.position[1])} className={e.allegiance + " " + e.blackwhite + " square"} onClick={(() => handleClick(e.position[0], e.position[1]))}><img src={"images/"+e.allegiance+e.pieceType+".png"} alt='a'  className="piece"></img></div>)
+                        return (<div id={"square" + (e.position[0] + 8 * e.position[1])} className={e.allegiance + " " + e.blackwhite + " square"} onClick={(() => handleClick(e.position[0], e.position[1]))}><img src={"images/" + e.allegiance + e.pieceType + ".png"} alt='a' className="piece"></img></div>)
                     }
                 )}
         </div>

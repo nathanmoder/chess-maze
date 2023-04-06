@@ -7,9 +7,8 @@ import Rules from './components/Rules';
 
 /*
 The App component, the only child of the root component,
-will create the layout of the webpage; broadly speaking,
-a header bar with the player name, rules, and score, and
-the board on which the game is played beneath it.
+will create the relevant routes for the webpage;
+one to the game, one to the rules, and one to the game over screen.
 */
 
 
