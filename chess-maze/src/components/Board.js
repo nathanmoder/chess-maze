@@ -180,7 +180,7 @@ function Board() {
         square1.style.backgroundColor = _blackwhite;
 
         //Randomly place down the goal square
-        const randx = Math.floor(Math.random() * 4 + 2);
+        const randx = Math.floor(Math.random() * 3 + 3);
         const randy = Math.floor(Math.random() * 8);
         const index = randx + (8 * randy)
         document.getElementById('square' + index).style.backgroundColor = 'gold';
@@ -284,7 +284,7 @@ function Board() {
     useEffect(() => {
         if (!playerTurn) {
             let temp = [...pieces]
-            const moveToMake = MoveAI((stageNumber < 4 ? stageNumber : 4), temp);
+            const moveToMake = MoveAI((stageNumber < 5 ? stageNumber : 5), temp);
             movePiece(moveToMake[0][0], moveToMake[0][1], moveToMake[1][0], moveToMake[1][1]);
             setPlayerTurn(true);
         }
