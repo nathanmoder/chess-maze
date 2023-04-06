@@ -113,7 +113,7 @@ function Board() {
         placePieces();
 
         //Randomly place down the goal square
-        const randx = Math.floor(Math.random() * 4 + 2);
+        const randx = Math.floor(Math.random() * 4 + 3);
         const randy = Math.floor(Math.random() * 8);
         const index = randx + (8 * randy)
         setPieces(prevPieces => {
