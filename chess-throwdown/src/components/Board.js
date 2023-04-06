@@ -4,7 +4,7 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import "../board.css";
-import { ScoreUpdateContext, ScoreContext } from './Home';
+import { ScoreUpdateContext, ScoreContext, TimeUpdateContext, TimeContext } from './Home';
 import { useNavigate } from 'react-router-dom';
 import PieceMovement from '../PieceMovement';
 import MoveAI from '../MoveAI';
@@ -47,6 +47,12 @@ function Board() {
     //Allow the component to properly navigate to the game over screen.
     let score = useContext(ScoreContext)
     const navigate = useNavigate();
+
+    //Used to manage the timer. startTime indicates the value of Date.now() when
+        //the game began, and time the milliseconds remaining in the game.
+    const timeUpdate=useContext(TimeUpdateContext);
+    const timer=useContext(TimeContext);
+    const [startTime,setStartTime]=useState(Date.now());
 
     //Adds a new element to the array pieces
     //INPUT: Attributes equivalent to those of the object in pieces
@@ -95,7 +101,7 @@ function Board() {
     //After executing, pieces will be full of squares both without and containing pieces
     //RETURN: None
     const initializeBoard = () => {
-        console.log("in initializer")
+        setStartTime(Date.now());
         scoreUpdate(0);
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
@@ -166,7 +172,6 @@ function Board() {
                 subsequentElememnts = temp
             }
             const newPiece = { pieceType: 'none', allegiance: 'none', blackwhite: _blackwhite, position: [gold[0], gold[1]] }
-            console.log("done removing old gold square");
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
         let square1 = document.getElementById('square' + index1);
@@ -332,6 +337,17 @@ function Board() {
             initializeBoard();
         }
     }, [])
+
+
+    const updateTime = () => {
+        timeUpdate((startTime+150000)-Date.now());
+    }
+
+    useEffect(()=>{
+        const interval=setInterval(()=>updateTime(),1000);
+        return ()=> clearInterval(interval);
+    },[]);
+
     return (
         <div id="board">
             {

@@ -200,7 +200,6 @@ function MoveAI(difficulty, board) {
             const moves = getAllMoves('p');
             let bestMoveValue = 9999;
             for (let move of moves) {
-                console.log(move);
                 const oldPiece = board[move[1][0] + 8 * move[1][1]];
                 movePiece([move[0], move[1]], 'none', 'none');
                 bestMoveValue = Math.min(bestMoveValue, alphaBeta(depth - 1, alpha, beta, !isMaximisingPlayer));
