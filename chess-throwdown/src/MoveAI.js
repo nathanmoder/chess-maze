@@ -15,8 +15,9 @@ function MoveAI(difficulty, board) {
     const valuePieceAt = (x, y) => {
         let locationMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let pieceValue = 0;
+        const piece=board[x+8*y];
         //A case statement which sets locationMatrix depending on the type of piece, and the value of the piece.
-        switch (board[x + 8 * y].pieceType) {
+        switch (piece.pieceType) {
             case 'pawn':
                 locationMatrix = [
                     0, 5, 5, 0, 5, 10, 50, 0,
@@ -94,11 +95,15 @@ function MoveAI(difficulty, board) {
                     20, 20, -10, -20, -30, -30, -30, -30,
                 ];
                 pieceValue = 20000;
+                //Special case for when the player king is standing on the goal square.
+                    //Allows the AI to oppose this scenario.
+                if(piece.allegiance=='p'&&piece.blackwhite=='gold')
+                    pieceValue=60000;
                 break;
         }
 
         let allegianceSign = 1;
-        if (board[x + 8 * y].allegiance == 'p')
+        if (piece.allegiance == 'p')
             allegianceSign = -1;
         let matrixLocation = (allegianceSign == -1) ? (x + 8 * y) : ((7 - x) + 8 * y);
         return (pieceValue + locationMatrix[matrixLocation]) * allegianceSign;
