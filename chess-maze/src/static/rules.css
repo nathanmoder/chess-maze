@@ -1,0 +1,77 @@
+.rules-title{
+    text-align: center;
+    color:gold;
+}
+
+#rules-link{
+    text-align: center;
+}
+
+#pawn{
+    display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 0px;
+  border-spacing: 5px;
+  column-gap: 0px;
+  row-gap: 0px;
+  width: 100px;
+  align-self: center;
+  margin-right: 10px;
+}
+
+#bishop{
+    display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 0px;
+  border-spacing: 5px;
+  column-gap: 0px;
+  row-gap: 0px;
+  width: 100px;
+  align-self: center;
+  margin-right: 10px;
+}
+
+#knight{
+    display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 0px;
+  border-spacing: 5px;
+  column-gap: 0px;
+  row-gap: 0px;
+  width: 100px;
+  align-self: center;
+  margin-right: 10px;
+}
+#rook{
+    display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 0px;
+  border-spacing: 5px;
+  column-gap: 0px;
+  row-gap: 0px;
+  width: 100px;
+  align-self: center;
+  margin-right: 10px;
+}
+#queen{
+    display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 0px;
+  border-spacing: 5px;
+  column-gap: 0px;
+  row-gap: 0px;
+  width: 100px;
+  align-self: center;
+  margin-right: 10px;
+}
+#king{
+    display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 0px;
+  border-spacing: 5px;
+  column-gap: 0px;
+  row-gap: 0px;
+  width: 100px;
+  align-self: center;
+  margin-right: 10px;
+}

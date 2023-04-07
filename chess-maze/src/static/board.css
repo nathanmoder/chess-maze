@@ -28,6 +28,10 @@
   background-color: gold;
 }
 
+.red{
+  background-color: red;
+}
+
 .piece {
   display: block;
   margin-left: auto;
