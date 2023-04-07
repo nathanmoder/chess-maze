@@ -1,0 +1,9 @@
+#timer{
+    border: solid;
+    border-color: black;
+    color: gold;
+    text-align: center;
+    padding: 30px;
+    font-size: large;
+    vertical-align: center;
+}

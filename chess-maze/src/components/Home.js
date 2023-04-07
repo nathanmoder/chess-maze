@@ -2,6 +2,7 @@ import React from 'react'
 import Score from './Score';
 import Board from './Board';
 import Timer from './Timer';
+import '../static/home.css';
 import { useState, createContext } from "react";
 import { Link } from 'react-router-dom';
 
@@ -21,16 +22,13 @@ function Home() {
         <TimeContext.Provider value={time}>
           <TimeUpdateContext.Provider value={setTime}>
             <div className="row">
-              <div className="col-sm-4"><Link to='/rules'>Rules</Link></div>
-
-              <div className="col-sm-4"><Score /></div>
-
-              <div className="col-sm-4"><Timer /></div>
-
+              <ScoreUpdateContext.Provider value={setScore}>
+                <Board />
+              </ScoreUpdateContext.Provider>
+              <div className="col-sm-2"><div id='rulesLink'><Link to='/rules'>Rules</Link></div>
+              <Score />
+              <Timer /></div>
             </div>
-            <ScoreUpdateContext.Provider value={setScore}>
-              <Board />
-            </ScoreUpdateContext.Provider>
           </TimeUpdateContext.Provider>
         </TimeContext.Provider>
       </ScoreContext.Provider>

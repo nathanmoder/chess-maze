@@ -3,7 +3,7 @@
 
 
 import React, { useState, useContext, useEffect } from 'react';
-import "../board.css";
+import "../static/board.css";
 import { ScoreUpdateContext, ScoreContext, TimeUpdateContext, TimeContext } from './Home';
 import { useNavigate } from 'react-router-dom';
 import PieceMovement from '../PieceMovement';
@@ -177,7 +177,7 @@ function Board() {
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
         let square1 = document.getElementById('square' + index1);
-        square1.style.backgroundColor = _blackwhite;
+        square1.style.backgroundColor = _blackwhite=="beige"?"rgb(205,227,213)":"rgb(98,83,78)";
 
         //Randomly place down the goal square
         const randx = Math.floor(Math.random() * 3 + 3);
@@ -275,7 +275,16 @@ function Board() {
             if (!(i[0] == newx && i[1] == newy && seizeCase)) {
                 let square = document.getElementById("square" + (i[0] + (8 * i[1])))
                 const _blackwhite = pieces[i[0] + (8 * i[1])].blackwhite;
-                square.style.backgroundColor = _blackwhite;
+                if(_blackwhite=="beige"){
+                    square.style.backgroundColor = "rgb(205,227,213)";
+                }else{
+                    if(_blackwhite=="green"){
+                        square.style.backgroundColor = "rgb(98,83,78)";       
+                    }
+                    else{
+                        square.style.backgroundColor = _blackwhite;
+                    }
+                }
             }
         }
     }
