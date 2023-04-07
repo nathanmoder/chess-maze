@@ -24,7 +24,7 @@ function Rules() {
       <div className="square beige"></div>
     </div>
   }
-  const getBishopBoard = () =>{
+  const getBishopBoard = () => {
     return <div id='bishop'>
       <div className="square red"></div><div className="square green"></div><div className="square beige"></div><div className="square green"></div><div className="square red"></div>
       <div className="square green"></div><div className="square red"></div><div className="square green"></div><div className="square red"></div><div className="square green"></div>
@@ -33,7 +33,7 @@ function Rules() {
       <div className="square red"></div><div className="square green"></div><div className="square beige"></div><div className="square green"></div><div className="square red"></div>
     </div>
   }
-  const getKnightBoard = () =>{
+  const getKnightBoard = () => {
     return <div id='knight'>
       <div className="square beige"></div><div className="square red"></div><div className="square beige"></div><div className="square red"></div><div className="square beige"></div>
       <div className="square red"></div><div className="square beige"></div><div className="square green"></div><div className="square beige"></div><div className="square red"></div>
@@ -42,7 +42,7 @@ function Rules() {
       <div className="square beige"></div><div className="square red"></div><div className="square beige"></div><div className="square red"></div><div className="square beige"></div>
     </div>
   }
-  const getRookBoard = () =>{
+  const getRookBoard = () => {
     return <div id='rook'>
       <div className="square beige"></div><div className="square green"></div><div className="square red"></div><div className="square green"></div><div className="square beige"></div>
       <div className="square green"></div><div className="square beige"></div><div className="square red"></div><div className="square beige"></div><div className="square green"></div>
@@ -51,7 +51,7 @@ function Rules() {
       <div className="square beige"></div><div className="square green"></div><div className="square red"></div><div className="square green"></div><div className="square beige"></div>
     </div>
   }
-  const getQueenBoard = () =>{
+  const getQueenBoard = () => {
     return <div id='queen'>
       <div className="square red"></div><div className="square green"></div><div className="square red"></div><div className="square green"></div><div className="square red"></div>
       <div className="square green"></div><div className="square red"></div><div className="square red"></div><div className="square red"></div><div className="square green"></div>
@@ -60,7 +60,7 @@ function Rules() {
       <div className="square red"></div><div className="square green"></div><div className="square red"></div><div className="square green"></div><div className="square red"></div>
     </div>
   }
-  const getKingBoard = () =>{
+  const getKingBoard = () => {
     return <div id='king'>
       <div className="square beige"></div><div className="square green"></div><div className="square beige"></div><div className="square green"></div><div className="square beige"></div>
       <div className="square green"></div><div className="square red"></div><div className="square red"></div><div className="square red"></div><div className="square green"></div>

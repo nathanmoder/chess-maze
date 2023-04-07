@@ -23,11 +23,11 @@ detecting game overs, and allowing for piece movement.
 
 function Board() {
     //Pieces will store an array of objects with four attributes.
-        //It will later be augmented by the addPiece, setPiece, newStage, and initializeBoard functions.
+    //It will later be augmented by the addPiece, setPiece, newStage, and initializeBoard functions.
     const [pieces, setPieces] = useState([{ pieceType: 'none', allegiance: 'none', blackwhite: 'beige', position: [0, 0] }])
 
     //Keeps track of whether or not the game has begun, so that initializeBoard
-        //is not called excessively.
+    //is not called excessively.
     const [hasStarted, setHasStarted] = useState(false)
 
     //Keeps track of whose turn it is.
@@ -37,24 +37,24 @@ function Board() {
     const [stageNumber, setStageNumber] = useState(1)
 
     //Keeps track of the coordinatees of the piece selected by the player, OR the boolean false
-        //when the player has selected no piece at all.
+    //when the player has selected no piece at all.
     const [pieceSelected, setPieceSelected] = useState(false)
 
     //Allows the component to update the score. Used when taking pieces and moving on
-        //to new stages.
+    //to new stages.
     const scoreUpdate = useContext(ScoreUpdateContext);
-    
+
     //Allow the component to properly navigate to the game over screen.
     let score = useContext(ScoreContext)
     const navigate = useNavigate();
 
     //Used to manage the timer. startTime indicates the value of Date.now() when
-        //the game began, and time the milliseconds remaining in the game.
-    const timeUpdate=useContext(TimeUpdateContext);
-    const timer=useContext(TimeContext);
-    const [startTime,setStartTime]=useState(Date.now());
+    //the game began, and time the milliseconds remaining in the game.
+    const timeUpdate = useContext(TimeUpdateContext);
+    const timer = useContext(TimeContext);
+    const [startTime, setStartTime] = useState(Date.now());
 
-    const moveSound=new Audio('/sounds/move.mp3');
+    const moveSound = new Audio('/sounds/move.mp3');
 
     //Adds a new element to the array pieces
     //INPUT: Attributes equivalent to those of the object in pieces
@@ -177,7 +177,7 @@ function Board() {
             return [...prevElements, newPiece, ...subsequentElememnts]
         })
         let square1 = document.getElementById('square' + index1);
-        square1.style.backgroundColor = _blackwhite=="beige"?"rgb(205,227,213)":"rgb(98,83,78)";
+        square1.style.backgroundColor = _blackwhite == "beige" ? "rgb(205,227,213)" : "rgb(98,83,78)";
 
         //Randomly place down the goal square
         const randx = Math.floor(Math.random() * 3 + 3);
@@ -201,7 +201,7 @@ function Board() {
 
     //Evaluates the occupation of a given square relative to a selected piece.
     //INPUT: x- and y-coordinates to be investigated, the allegiance of
-        //the input piece, and an array representing the board.
+    //the input piece, and an array representing the board.
     //RETURN: 0 if none, 1 if friendly, 2 if enemy
     const hasPiece = (x, y, allegiance) => {
         if (x < 0 || x > 7 || y < 0 || y > 7 || pieces[x + (8 * y)].pieceType == 'none') {
@@ -218,7 +218,7 @@ function Board() {
     }
 
     //Handles the moving of pieces on both sides.
-        //It also navigates to the game over screen on a loss.
+    //It also navigates to the game over screen on a loss.
     //INPUT:coordinates representing the start and end of movement.
     //RETURN: True if the player wins with this move, false otherwise.
     const movePiece = (startx, starty, endx, endy) => {
@@ -240,6 +240,11 @@ function Board() {
         }
 
         //TODO: If enemy king dies, next stage and increment score
+        if (pieceThere.pieceType == 'king' && pieceThere.allegiance == 'e') {
+            scoreUpdate(prevScore => prevScore + (10 * stageNumber));
+            setPlayerTurn(true);
+            setStageNumber(prevStage => prevStage + 1);
+        }
 
         //If player king onto gold, next stage and increment score
         if (pieceHere.pieceType == 'king' && pieceHere.allegiance == 'p' && pieceThere.blackwhite == 'gold') {
@@ -275,13 +280,13 @@ function Board() {
             if (!(i[0] == newx && i[1] == newy && seizeCase)) {
                 let square = document.getElementById("square" + (i[0] + (8 * i[1])))
                 const _blackwhite = pieces[i[0] + (8 * i[1])].blackwhite;
-                if(_blackwhite=="beige"){
+                if (_blackwhite == "beige") {
                     square.style.backgroundColor = "rgb(205,227,213)";
-                }else{
-                    if(_blackwhite=="green"){
-                        square.style.backgroundColor = "rgb(98,83,78)";       
+                } else {
+                    if (_blackwhite == "green") {
+                        square.style.backgroundColor = "rgb(98,83,78)";
                     }
-                    else{
+                    else {
                         square.style.backgroundColor = _blackwhite;
                     }
                 }
@@ -352,13 +357,13 @@ function Board() {
 
 
     const updateTime = () => {
-        timeUpdate((startTime+150000)-Date.now());
+        timeUpdate((startTime + 150000) - Date.now());
     }
 
-    useEffect(()=>{
-        const interval=setInterval(()=>updateTime(),1000);
-        return ()=> clearInterval(interval);
-    },[]);
+    useEffect(() => {
+        const interval = setInterval(() => updateTime(), 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div id="board">
